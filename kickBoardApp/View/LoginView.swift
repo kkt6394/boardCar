@@ -50,7 +50,7 @@ class LoginView: UIView {
         idTextField.leftViewMode = .always
         idTextField.placeholder = "아이디"
         idTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
-        idTextField.layer.cornerRadius = 8.0
+        idTextField.layer.cornerRadius = 13.0
         idTextField.layer.borderWidth = 1.0
         idTextField.layer.borderColor = UIColor(red: 173/255, green: 68/255, blue: 162/255, alpha: 1.0).cgColor
         idTextField.backgroundColor = UIColor(red: 255/255, green: 250/255, blue: 247/255, alpha: 1.0)
@@ -61,7 +61,7 @@ class LoginView: UIView {
 
         passwordTextField.placeholder = "비밀번호"
         passwordTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
-        passwordTextField.layer.cornerRadius = 8.0
+        passwordTextField.layer.cornerRadius = 13.0
         passwordTextField.layer.borderWidth = 1.0
         passwordTextField.layer.borderColor = UIColor(red: 173/255, green: 68/255, blue: 162/255, alpha: 1.0).cgColor
         passwordTextField.backgroundColor = UIColor(red: 255/255, green: 250/255, blue: 247/255, alpha: 1.0)
@@ -71,7 +71,7 @@ class LoginView: UIView {
         loginButton.setTitle("로그인", for: .normal)
         loginButton.titleLabel?.font = UIFont(name: "SUIT-Thin", size: 20)
         loginButton.backgroundColor = UIColor(red: 106/255, green: 44/255, blue: 112/255, alpha: 1.0)
-        loginButton.layer.cornerRadius = 8.0
+        loginButton.layer.cornerRadius = 13.0
         loginButton.clipsToBounds = true
         
         //MARK: 아이디 / 비밀번호 찾기 UI
