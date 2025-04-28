@@ -114,7 +114,7 @@ class LoginView: UIView {
         idTextField.snp.makeConstraints {
             $0.top.equalTo(logo.snp.bottom).offset(14)
             $0.width.equalTo(350)
-            $0.height.equalTo(60)
+            $0.height.equalTo(46)
             $0.leading.equalToSuperview().offset(26)
             $0.trailing.equalToSuperview().inset(26)
         }
@@ -122,7 +122,7 @@ class LoginView: UIView {
         passwordTextField.snp.makeConstraints {
             $0.top.equalTo(idTextField.snp.bottom).offset(20)
             $0.width.equalTo(350)
-            $0.height.equalTo(60)
+            $0.height.equalTo(46)
             $0.leading.equalToSuperview().offset(26)
             $0.trailing.equalToSuperview().inset(26)
         }
@@ -130,7 +130,7 @@ class LoginView: UIView {
         loginButton.snp.makeConstraints {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(16)
             $0.width.equalTo(350)
-            $0.height.equalTo(50)
+            $0.height.equalTo(41)
             $0.leading.equalToSuperview().offset(26)
             $0.trailing.equalToSuperview().inset(26)
         }
