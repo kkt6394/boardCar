@@ -6,14 +6,16 @@
 //
 
 import UIKit
+import NMapsMap
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        let myView = NMFNaverMapView(frame: view.frame)
+                view.addSubview(myView)
     }
-
+    
 
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B8CDB85D2DBF192C009BFBBD /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = B8CDB85C2DBF192C009BFBBD /* NMapsMap */; };
 		B8E6E4212DBB54390097AF10 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B8E6E4202DBB54390097AF10 /* SnapKit */; };
 		B8E6E4242DBB54450097AF10 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B8E6E4232DBB54450097AF10 /* Alamofire */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8E6E4212DBB54390097AF10 /* SnapKit in Frameworks */,
+				B8CDB85D2DBF192C009BFBBD /* NMapsMap in Frameworks */,
 				B8E6E4242DBB54450097AF10 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				B8E6E4202DBB54390097AF10 /* SnapKit */,
 				B8E6E4232DBB54450097AF10 /* Alamofire */,
+				B8CDB85C2DBF192C009BFBBD /* NMapsMap */,
 			);
 			productName = kickBoardApp;
 			productReference = B8E6E4072DBB541E0097AF10 /* kickBoardApp.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				B8E6E41F2DBB54390097AF10 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				B8E6E4222DBB54450097AF10 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				B8CDB85B2DBF192C009BFBBD /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B8E6E4082DBB541E0097AF10 /* Products */;
@@ -164,6 +168,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -190,6 +195,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -346,6 +352,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B8CDB85B2DBF192C009BFBBD /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.21.0;
+			};
+		};
 		B8E6E41F2DBB54390097AF10 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -365,6 +379,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B8CDB85C2DBF192C009BFBBD /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B8CDB85B2DBF192C009BFBBD /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
+		};
 		B8E6E4202DBB54390097AF10 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B8E6E41F2DBB54390097AF10 /* XCRemoteSwiftPackageReference "SnapKit" */;
