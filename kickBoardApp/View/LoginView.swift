@@ -10,15 +10,15 @@ import SnapKit
 
 class LoginView: UIView {
     
-    let logo = UIImageView()
-    let idTextField = UITextField()
-    let passwordTextField = UITextField()
-    let loginButton = UIButton()
-    let findButton = UIButton()
-    let stackView = UIStackView()
-    let coinImage = UIImageView()
-    let pointLabel = UILabel()
-    let joinButton = UIButton()
+    private let logo = UIImageView()
+    private let idTextField = UITextField()
+    private let passwordTextField = UITextField()
+    private let loginButton = UIButton()
+    private let findButton = UIButton()
+    private let stackView = UIStackView()
+    private let coinImage = UIImageView()
+    private let pointLabel = UILabel()
+    private let joinButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +30,7 @@ class LoginView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     //MARK: UI 설정 메서드
-    func setupUI() {
+    private func setupUI() {
         self.backgroundColor = .white
         [logo,
          idTextField,
@@ -60,6 +60,7 @@ class LoginView: UIView {
         passwordTextField.leftViewMode = .always
 
         passwordTextField.placeholder = "비밀번호"
+        passwordTextField.isSecureTextEntry = true
         passwordTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
         passwordTextField.layer.cornerRadius = 13.0
         passwordTextField.layer.borderWidth = 1.0
@@ -103,7 +104,7 @@ class LoginView: UIView {
     }
     
     //MARK: 제약 설정 메서드
-    func setupConstraints() {
+    private func setupConstraints() {
         
         //MARK: 로고 제약
         logo.snp.makeConstraints {
@@ -151,5 +152,13 @@ class LoginView: UIView {
             $0.width.equalTo(200)
             $0.height.equalTo(36)
         }
+    }
+    @objc
+    private func loginButtonTapped() {
+        
+    }
+    @objc
+    private func joinButtonTapped() {
+        
     }
 }
