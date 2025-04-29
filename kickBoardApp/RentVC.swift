@@ -2,21 +2,27 @@
 //  RentVC.swift
 //  kickBoardApp
 //
-//  Created by 김재우 on 4/29/25.
+//  Created by Lee on 4/28/25.
 //
-
+//
+import Foundation
 import UIKit
 import NMapsMap
 
+
 class RentVC: UIViewController {
 
+    let rentView = RentView()
+
+//    var locationManager = CLLocationManager()
+//    let geoCoder = CLGeocoder()
+
+    override func loadView() {
+        view = rentView
+    }
+
     override func viewDidLoad() {
+    }
+}
         super.viewDidLoad()
 
-
-    }
-    override func loadView() {
-
-    }
-
-}
