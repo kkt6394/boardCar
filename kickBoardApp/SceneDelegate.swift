@@ -18,17 +18,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
       
-        window.rootViewController = splashView
-        let splashView = SplashView()
+        
+//        let splashView = SplashView()
+        
+        window.rootViewController = ShareViewController()
       
-        window.overrideUserInterfaceStyle = UIUserInterfaceStyle.light
+//        window.overrideUserInterfaceStyle = UIUserInterfaceStyle.light
         
         window.makeKeyAndVisible()
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            window.rootViewController = ViewController()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//            window.rootViewController = ViewController()
+//        }
         
         self.window = window
 }
