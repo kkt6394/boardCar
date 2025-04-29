@@ -32,17 +32,21 @@ class ShareViewCell: UITableViewCell {
         kickBoardName.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
         kickBoardName.leftViewMode = .always
         kickBoardName.placeholder = "킥보드 이름"
-//        kickBoardName.font = UIFont(name: <#T##String#>, size: <#T##CGFloat#>)
+        kickBoardName.font = UIFont(name: "SUIT-Regular", size: 16)
         kickBoardName.layer.cornerRadius = 13.0
         kickBoardName.layer.borderWidth = 1.0
-        kickBoardName.layer.borderColor = UIColor.brown.cgColor
+        kickBoardName.layer.borderColor = UIColor.black.cgColor
         kickBoardName.backgroundColor = .white
         
         pickerView.backgroundColor = .systemGray6
+        pickerView.backgroundColor = .white
+        pickerView.layer.borderWidth = 1.0
+        pickerView.layer.borderColor = UIColor.black.cgColor
+        pickerView.layer.cornerRadius = 13.0
         
         // 내 킥보드 공유하기 UIButton
         sharedButton.setTitle("내 킥보드 공유하기", for: .normal)
-//        sharedButton.titleLabel?.font =
+        sharedButton.titleLabel?.font = UIFont(name: "SUIT-Heavy", size: 18)
         sharedButton.backgroundColor = .purple
         sharedButton.layer.cornerRadius = 13.0
         sharedButton.clipsToBounds = true
@@ -56,7 +60,7 @@ class ShareViewCell: UITableViewCell {
         pickerView.snp.makeConstraints {
             $0.top.equalTo(kickBoardName.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(8)
-            $0.height.equalTo(36)
+            $0.height.equalTo(45)
         }
         
         sharedButton.snp.makeConstraints {
@@ -67,6 +71,5 @@ class ShareViewCell: UITableViewCell {
         }
         
     }
-    
     
 }

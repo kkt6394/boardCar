@@ -12,7 +12,12 @@ import SnapKit
 class ShareViewController: UIViewController {
     
     let shareView = ShareView()
-    
+    /* 1...12범위의 숫자를 배열로 생성하고 map으로 새로운 배열로 리턴
+     %02d format의 시작 % , 앞에 0을 넣고 시작, 2 두자리수, d 정수출력
+     */
+    let months = Array(1...12).map { String(format: "%02d", $0) }
+    let days = Array(1...31).map { String(format: "%02d", $0) }
+    let years = Array(2000...2030).map { "\($0)" }
 
 
     override func loadView() {
