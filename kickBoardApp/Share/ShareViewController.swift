@@ -27,27 +27,51 @@ class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let myView = NMFNaverMapView(frame: view.frame)
-//                view.addSubview(myView)
         
         shareView.tableView.dataSource = self
         shareView.tableView.delegate = self
         shareView.tableView.register(ShareViewCell.self, forCellReuseIdentifier: "ShareViewCell")
         // 셀의 제약조건을 바탕으로 자동으로 계산
-        shareView.tableView.rowHeight = UITableView.automaticDimension
+//        shareView.tableView.rowHeight = UITableView.automaticDimension
         // UITableView가 초기 렌더링시 성능 최적화 보통(100..300)으로 설정
-        shareView.tableView.estimatedRowHeight = 200
+//        shareView.tableView.estimatedRowHeight = 200
         shareView.tableView.isScrollEnabled = false
         shareView.tableView.separatorStyle = .none
-        shareView.tableView.backgroundColor = .white
+        shareView.isUserInteractionEnabled = true
+        shareView.tableView.isUserInteractionEnabled = true
 
+//    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+//    
+//    let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+//            view.addGestureRecognizer(tap)
+        }
 
-        }
-    
-    @objc func buttonTapped() {
-        
-        }
+//
+//    @objc func keyboardWillShow(_ notification: Notification) {
+//            guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+//            shareView.tableView.contentInset.bottom = keyboardFrame.height
+//        }
+//    
+//    @objc func keyboardWillHide(_ notification: Notification) {
+//            shareView.tableView.contentInset.bottom = 0
+//        }
+//    
+//    @objc func dismissKeyboard() {
+//            view.endEditing(true)
+//        }
+//
+//        deinit {
+//            NotificationCenter.default.removeObserver(self)
+//        }
 }
+
+
+    
+//    @objc func buttonTapped() {
+//        print("버튼이 눌렸습니다")
+//        }
+
     
 extension ShareViewController: UITableViewDelegate, UITableViewDataSource {
         
@@ -61,7 +85,7 @@ extension ShareViewController: UITableViewDelegate, UITableViewDataSource {
             cell.pickerView.delegate = self
             cell.pickerView.dataSource = self
             cell.sharedButton.tag = indexPath.row
-            cell.sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+//            cell.sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             
             
             return cell

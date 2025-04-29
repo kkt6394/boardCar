@@ -10,14 +10,19 @@ import SnapKit
 
 class ShareViewCell: UITableViewCell {
     
-    let kickBoardName = UITextField()
-    let pickerView = UIPickerView()
-    let sharedButton = UIButton()
-    let dateLabel = UILabel()
+    public let kickBoardName = UITextField()
+    public let pickerView = UIPickerView()
+    public let sharedButton = UIButton()
+    public let dateLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpCell()
+        selectionStyle = .none
+        
+    sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+
+        
     }
 
     required init?(coder: NSCoder) {
@@ -39,8 +44,9 @@ class ShareViewCell: UITableViewCell {
         kickBoardName.layer.borderWidth = 1.0
         kickBoardName.layer.borderColor = UIColor.black.cgColor
         kickBoardName.backgroundColor = .white
+        kickBoardName.isUserInteractionEnabled = true
         
-        pickerView.backgroundColor = .systemGray6
+        // 공유 기간 UIPickerView
         pickerView.backgroundColor = .white
         pickerView.layer.borderWidth = 1.0
         pickerView.layer.borderColor = UIColor.black.cgColor
@@ -49,14 +55,13 @@ class ShareViewCell: UITableViewCell {
         // 내 킥보드 공유하기 UIButton
         sharedButton.setTitle("내 킥보드 공유하기", for: .normal)
         sharedButton.titleLabel?.font = UIFont(name: "SUIT-Heavy", size: 18)
-        sharedButton.backgroundColor = .purple
+        sharedButton.backgroundColor = UIColor.main
         sharedButton.layer.cornerRadius = 13.0
         sharedButton.clipsToBounds = true
         
         dateLabel.text = "까지"
         dateLabel.font = UIFont(name: "SUIT-Regular", size: 16)
-        
-                        
+                            
         kickBoardName.snp.makeConstraints {
             $0.top.equalToSuperview().inset(8)
             $0.leading.trailing.equalToSuperview().inset(8)
@@ -65,8 +70,8 @@ class ShareViewCell: UITableViewCell {
         
         pickerView.snp.makeConstraints {
             $0.top.equalTo(kickBoardName.snp.bottom).offset(8)
-            $0.leading.trailing.equalToSuperview().inset(8)
-            $0.width.equalToSuperview().multipliedBy(0.8)
+            $0.leading.equalToSuperview().inset(8)
+            $0.trailing.equalToSuperview().inset(48)
             $0.height.equalTo(45)
         }
         
@@ -83,6 +88,10 @@ class ShareViewCell: UITableViewCell {
             $0.centerY.equalTo(pickerView)
         }
         
+    }
+    
+    @objc func buttonTapped() {
+        print("공유하기 버튼이 눌렸습니다")
     }
     
 }
