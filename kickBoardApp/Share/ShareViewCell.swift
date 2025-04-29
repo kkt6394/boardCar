@@ -13,7 +13,7 @@ class ShareViewCell: UITableViewCell {
     let kickBoardName = UITextField()
     let pickerView = UIPickerView()
     let sharedButton = UIButton()
-
+    let dateLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,7 +27,9 @@ class ShareViewCell: UITableViewCell {
     
     private func setUpCell() {
         
-        [kickBoardName, pickerView, sharedButton].forEach { contentView.addSubview($0) }
+        backgroundColor = UIColor.sub3
+        
+        [kickBoardName, pickerView, sharedButton, dateLabel].forEach { contentView.addSubview($0) }
         // 킥보드 이름 UITextField
         kickBoardName.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
         kickBoardName.leftViewMode = .always
@@ -51,6 +53,10 @@ class ShareViewCell: UITableViewCell {
         sharedButton.layer.cornerRadius = 13.0
         sharedButton.clipsToBounds = true
         
+        dateLabel.text = "까지"
+        dateLabel.font = UIFont(name: "SUIT-Regular", size: 16)
+        
+                        
         kickBoardName.snp.makeConstraints {
             $0.top.equalToSuperview().inset(8)
             $0.leading.trailing.equalToSuperview().inset(8)
@@ -60,6 +66,7 @@ class ShareViewCell: UITableViewCell {
         pickerView.snp.makeConstraints {
             $0.top.equalTo(kickBoardName.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(8)
+            $0.width.equalToSuperview().multipliedBy(0.8)
             $0.height.equalTo(45)
         }
         
@@ -68,6 +75,12 @@ class ShareViewCell: UITableViewCell {
             $0.leading.trailing.equalToSuperview().inset(8)
             $0.height.equalTo(41)
             $0.bottom.equalToSuperview().inset(8)
+        }
+        
+        dateLabel.snp.makeConstraints {
+            $0.leading.equalTo(pickerView.snp.trailing).offset(8)
+            $0.trailing.equalToSuperview().inset(8)
+            $0.centerY.equalTo(pickerView)
         }
         
     }

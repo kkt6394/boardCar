@@ -45,11 +45,11 @@ class ShareViewController: UIViewController {
         }
     
     @objc func buttonTapped() {
-            
+        
         }
 }
     
-                  extension ShareViewController: UITableViewDelegate, UITableViewDataSource {
+extension ShareViewController: UITableViewDelegate, UITableViewDataSource {
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
         
@@ -68,7 +68,7 @@ class ShareViewController: UIViewController {
         }
     }
                   
-                  extension ShareViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension ShareViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         func numberOfComponents(in pickerView: UIPickerView) -> Int {
             return 3
