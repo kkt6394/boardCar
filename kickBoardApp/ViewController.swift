@@ -9,6 +9,8 @@ import UIKit
 import NMapsMap
 
 class ViewController: UIViewController {
+    
+    let shareView = ShareViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
