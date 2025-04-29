@@ -22,7 +22,6 @@ class RentVC: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
     }
 }
-        super.viewDidLoad()
-

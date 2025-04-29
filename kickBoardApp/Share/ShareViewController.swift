@@ -12,7 +12,7 @@ import SnapKit
 class ShareViewController: UIViewController {
     
     let shareView = ShareView()
-    let option = ["Option 1", "Option 2", "Option 3"]
+    
 
 
     override func loadView() {
@@ -44,34 +44,60 @@ class ShareViewController: UIViewController {
         }
 }
     
-extension ShareViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ShareViewCell", for: indexPath) as? ShareViewCell else {
-            return UITableViewCell()
+                  extension ShareViewController: UITableViewDelegate, UITableViewDataSource {
+        
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ShareViewCell", for: indexPath) as? ShareViewCell else {
+                return UITableViewCell()
+            }
+            
+            cell.pickerView.delegate = self
+            cell.pickerView.dataSource = self
+            cell.sharedButton.tag = indexPath.row
+            cell.sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+            
+            
+            return cell
         }
-
-        cell.pickerView.delegate = self
-        cell.pickerView.dataSource = self
-        cell.sharedButton.tag = indexPath.row
-        cell.sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-
-
-        return cell
     }
-}
-
-extension ShareViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int { 1 }
-
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        option.count
+                  
+                  extension ShareViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+        
+        func numberOfComponents(in pickerView: UIPickerView) -> Int {
+            return 3
+        }
+        
+        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+            switch component {
+            case 0: return years.count
+            case 1: return months.count
+            case 2: return days.count
+            default: return 0
+            }
+        }
+        
+        func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+            return pickerView.frame.width / 3
+        }
+        
+        func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+            let label = UILabel()
+            label.textAlignment = .center
+            label.textColor = .black
+            label.font = UIFont(name: "SUIT-Regular", size: 16)
+            
+            switch component {
+            case 0: label.text = years[row] + "년"
+            case 1: label.text = months[row] + "월"
+            case 2: label.text = days[row] + "일"
+            default: label.text = ""
+            }
+            
+            label.backgroundColor = UIColor.white
+            
+            return label
+        }
     }
-
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        option[row]
-    }
-}
-
+                  
