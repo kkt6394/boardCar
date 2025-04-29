@@ -10,6 +10,9 @@ import SnapKit
 
 class LoginView: UIView {
     
+    // 이 클래스는 UIView, 어느 뷰 컨트롤러에서 작동할 지 정해야함.
+    weak var loginVC: LoginVC?
+    
     private let logo = UIImageView()
     private let idTextField = UITextField()
     private let passwordTextField = UITextField()
@@ -74,6 +77,7 @@ class LoginView: UIView {
         loginButton.backgroundColor = UIColor(red: 106/255, green: 44/255, blue: 112/255, alpha: 1.0)
         loginButton.layer.cornerRadius = 13.0
         loginButton.clipsToBounds = true
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         
         //MARK: 아이디 / 비밀번호 찾기 UI
         findButton.setTitle("아이디 / 비밀번호 찾기", for: .normal)
@@ -101,6 +105,7 @@ class LoginView: UIView {
         joinButton.backgroundColor = UIColor(red: 64/255, green: 53/255, blue: 36/255, alpha: 1.0)
         joinButton.layer.cornerRadius = 8.0
         joinButton.clipsToBounds = true
+        joinButton.addTarget(self, action: #selector(joinButtonTapped), for: .touchUpInside)
     }
     
     //MARK: 제약 설정 메서드
@@ -156,9 +161,17 @@ class LoginView: UIView {
     @objc
     private func loginButtonTapped() {
         
+        print("clicked")
+        let nextVC = ViewController()
+
+        loginVC?.navigationController?.pushViewController(nextVC, animated: true)
+
     }
     @objc
     private func joinButtonTapped() {
-        
+        print("clicked")
+        let nextVC = UnderTabBarController()
+        loginVC?.navigationController?.pushViewController(nextVC, animated: true)
+
     }
 }

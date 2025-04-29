@@ -27,8 +27,8 @@ class MyPageTableView: UIView {
     private func setupTableView() {
         addSubview(tableView)
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.id)
-        tableView.dataSource = self
-        tableView.delegate = self
+//        tableView.dataSource = self
+//        tableView.delegate = self
 
     }
     //MARK: 제약 설정 메서드
@@ -40,28 +40,28 @@ class MyPageTableView: UIView {
     
 }
 
-extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        TableViewCell.sections.count
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return TableViewCell.items[section].count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return TableViewCell.sections[section]
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.id, for: indexPath) as? TableViewCell else {
-            return UITableViewCell()
-        }
-        cell.textLabel?.text = TableViewCell.items[indexPath.section][indexPath.row]
-        cell.backgroundColor = .white
-        
-        return cell
-        
-    }
-}
+//extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        TableViewCell.sections.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return TableViewCell.items[section].count
+//    }
+//    
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return TableViewCell.sections[section]
+//    }
+//    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.id, for: indexPath) as? TableViewCell else {
+//            return UITableViewCell()
+//        }
+//        cell.textLabel?.text = TableViewCell.items[indexPath.section][indexPath.row]
+//        cell.backgroundColor = .white
+//        
+//        return cell
+//        
+//    }
+//}

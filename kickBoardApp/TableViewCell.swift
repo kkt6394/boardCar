@@ -15,10 +15,11 @@ class TableViewCell: UITableViewCell {
     enum TableViewSections {
         case nameSection(imageName: String, name: String, label: String)
         case pointSection(lable: String, imageName: String, point: Int)
-        case historySection(header: String, first: Stirng, second: String)
-        case 
-        case fifth
+        case historySection(header: String, first: String, second: String)
+        case shareInfo(imageName: String, label: String, period: String )
+        case ad(imageName: String)
     }
+    
     private let helmetImage = UIImageView()
     private let safeLabel = UILabel()
 
