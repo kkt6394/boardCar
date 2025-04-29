@@ -23,7 +23,7 @@ class signupViewController: UIViewController {
     }
     
     func setupUI() {
-        signupButton.addTarget(self, action: #selector(signup), for: .touchUpInside)
+    
     }
     
     @objc func signup() {
