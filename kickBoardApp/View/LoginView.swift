@@ -10,15 +10,18 @@ import SnapKit
 
 class LoginView: UIView {
     
-    let logo = UIImageView()
-    let idTextField = UITextField()
-    let passwordTextField = UITextField()
-    let loginButton = UIButton()
-    let findButton = UIButton()
-    let stackView = UIStackView()
-    let coinImage = UIImageView()
-    let pointLabel = UILabel()
-    let joinButton = UIButton()
+    // 이 클래스는 UIView, 어느 뷰 컨트롤러에서 작동할 지 정해야함.
+    weak var loginVC: LoginVC?
+    
+    private let logo = UIImageView()
+    private let idTextField = UITextField()
+    private let passwordTextField = UITextField()
+    private let loginButton = UIButton()
+    private let findButton = UIButton()
+    private let stackView = UIStackView()
+    private let coinImage = UIImageView()
+    private let pointLabel = UILabel()
+    private let joinButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +33,7 @@ class LoginView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     //MARK: UI 설정 메서드
-    func setupUI() {
+    private func setupUI() {
         self.backgroundColor = .white
         [logo,
          idTextField,
@@ -52,27 +55,29 @@ class LoginView: UIView {
         idTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
         idTextField.layer.cornerRadius = 13.0
         idTextField.layer.borderWidth = 1.0
-        idTextField.layer.borderColor = UIColor(red: 173/255, green: 68/255, blue: 162/255, alpha: 1.0).cgColor
-        idTextField.backgroundColor = UIColor(red: 255/255, green: 250/255, blue: 247/255, alpha: 1.0)
+        idTextField.layer.borderColor = UIColor.main.cgColor
+        idTextField.backgroundColor = UIColor.sub3
         
         //MARK: password 텍스트 필드 UI
         passwordTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
         passwordTextField.leftViewMode = .always
 
         passwordTextField.placeholder = "비밀번호"
+        passwordTextField.isSecureTextEntry = true
         passwordTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
         passwordTextField.layer.cornerRadius = 13.0
         passwordTextField.layer.borderWidth = 1.0
-        passwordTextField.layer.borderColor = UIColor(red: 173/255, green: 68/255, blue: 162/255, alpha: 1.0).cgColor
-        passwordTextField.backgroundColor = UIColor(red: 255/255, green: 250/255, blue: 247/255, alpha: 1.0)
+        passwordTextField.layer.borderColor = UIColor.main.cgColor
+        passwordTextField.backgroundColor = UIColor.sub3
 
         
         //MARK: 로그인 버튼 UI
         loginButton.setTitle("로그인", for: .normal)
         loginButton.titleLabel?.font = UIFont(name: "SUIT-Thin", size: 20)
-        loginButton.backgroundColor = UIColor(red: 106/255, green: 44/255, blue: 112/255, alpha: 1.0)
+        loginButton.backgroundColor = UIColor.main
         loginButton.layer.cornerRadius = 13.0
         loginButton.clipsToBounds = true
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         
         //MARK: 아이디 / 비밀번호 찾기 UI
         findButton.setTitle("아이디 / 비밀번호 찾기", for: .normal)
@@ -97,13 +102,14 @@ class LoginView: UIView {
         //MARK: 회원가입 버튼 UI
         joinButton.setTitle("회원가입", for: .normal)
         joinButton.titleLabel?.font = UIFont(name: "SUIT-Extralight", size: 12)
-        joinButton.backgroundColor = UIColor(red: 64/255, green: 53/255, blue: 36/255, alpha: 1.0)
+        joinButton.backgroundColor = UIColor.font2
         joinButton.layer.cornerRadius = 8.0
         joinButton.clipsToBounds = true
+        joinButton.addTarget(self, action: #selector(joinButtonTapped), for: .touchUpInside)
     }
     
     //MARK: 제약 설정 메서드
-    func setupConstraints() {
+    private func setupConstraints() {
         
         //MARK: 로고 제약
         logo.snp.makeConstraints {
@@ -151,5 +157,21 @@ class LoginView: UIView {
             $0.width.equalTo(200)
             $0.height.equalTo(36)
         }
+    }
+    @objc
+    func loginButtonTapped() {
+        
+        print("clicked")
+        let nextVC = UnderTabBarController()
+
+        loginVC?.navigationController?.pushViewController(nextVC, animated: true)
+
+    }
+    @objc
+    func joinButtonTapped() {
+        print("clicked")
+        let nextVC = signupViewController()
+        loginVC?.navigationController?.pushViewController(nextVC, animated: true)
+
     }
 }
