@@ -20,7 +20,7 @@ class ShareViewCell: UITableViewCell {
         setUpCell()
         selectionStyle = .none
         
-    sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+//    sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
 
         
     }
@@ -35,6 +35,7 @@ class ShareViewCell: UITableViewCell {
         backgroundColor = UIColor.sub3
         
         [kickBoardName, pickerView, sharedButton, dateLabel].forEach { contentView.addSubview($0) }
+        
         // 킥보드 이름 UITextField
         kickBoardName.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
         kickBoardName.leftViewMode = .always
@@ -42,14 +43,14 @@ class ShareViewCell: UITableViewCell {
         kickBoardName.font = UIFont(name: "SUIT-Regular", size: 16)
         kickBoardName.layer.cornerRadius = 13.0
         kickBoardName.layer.borderWidth = 1.0
-        kickBoardName.layer.borderColor = UIColor.black.cgColor
+        kickBoardName.layer.borderColor = UIColor.font3.cgColor
         kickBoardName.backgroundColor = .white
         kickBoardName.isUserInteractionEnabled = true
         
         // 공유 기간 UIPickerView
         pickerView.backgroundColor = .white
         pickerView.layer.borderWidth = 1.0
-        pickerView.layer.borderColor = UIColor.black.cgColor
+        pickerView.layer.borderColor = UIColor.font3.cgColor
         pickerView.layer.cornerRadius = 13.0
         
         // 내 킥보드 공유하기 UIButton
@@ -63,7 +64,7 @@ class ShareViewCell: UITableViewCell {
         dateLabel.font = UIFont(name: "SUIT-Regular", size: 16)
                             
         kickBoardName.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(8)
+            $0.top.equalToSuperview().offset(8)
             $0.leading.trailing.equalToSuperview().inset(8)
             $0.height.equalTo(36)
         }
@@ -79,7 +80,6 @@ class ShareViewCell: UITableViewCell {
             $0.top.equalTo(pickerView.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview().inset(8)
             $0.height.equalTo(41)
-            $0.bottom.equalToSuperview().inset(8)
         }
         
         dateLabel.snp.makeConstraints {
