@@ -55,8 +55,8 @@ class LoginView: UIView {
         idTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
         idTextField.layer.cornerRadius = 13.0
         idTextField.layer.borderWidth = 1.0
-        idTextField.layer.borderColor = UIColor(red: 173/255, green: 68/255, blue: 162/255, alpha: 1.0).cgColor
-        idTextField.backgroundColor = UIColor(red: 255/255, green: 250/255, blue: 247/255, alpha: 1.0)
+        idTextField.layer.borderColor = UIColor.main.cgColor
+        idTextField.backgroundColor = UIColor.sub3
         
         //MARK: password 텍스트 필드 UI
         passwordTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
@@ -67,14 +67,14 @@ class LoginView: UIView {
         passwordTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
         passwordTextField.layer.cornerRadius = 13.0
         passwordTextField.layer.borderWidth = 1.0
-        passwordTextField.layer.borderColor = UIColor(red: 173/255, green: 68/255, blue: 162/255, alpha: 1.0).cgColor
-        passwordTextField.backgroundColor = UIColor(red: 255/255, green: 250/255, blue: 247/255, alpha: 1.0)
+        passwordTextField.layer.borderColor = UIColor.main.cgColor
+        passwordTextField.backgroundColor = UIColor.sub3
 
         
         //MARK: 로그인 버튼 UI
         loginButton.setTitle("로그인", for: .normal)
         loginButton.titleLabel?.font = UIFont(name: "SUIT-Thin", size: 20)
-        loginButton.backgroundColor = UIColor(red: 106/255, green: 44/255, blue: 112/255, alpha: 1.0)
+        loginButton.backgroundColor = UIColor.main
         loginButton.layer.cornerRadius = 13.0
         loginButton.clipsToBounds = true
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
@@ -102,7 +102,7 @@ class LoginView: UIView {
         //MARK: 회원가입 버튼 UI
         joinButton.setTitle("회원가입", for: .normal)
         joinButton.titleLabel?.font = UIFont(name: "SUIT-Extralight", size: 12)
-        joinButton.backgroundColor = UIColor(red: 64/255, green: 53/255, blue: 36/255, alpha: 1.0)
+        joinButton.backgroundColor = UIColor.font2
         joinButton.layer.cornerRadius = 8.0
         joinButton.clipsToBounds = true
         joinButton.addTarget(self, action: #selector(joinButtonTapped), for: .touchUpInside)

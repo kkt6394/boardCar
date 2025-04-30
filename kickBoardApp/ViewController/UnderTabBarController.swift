@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class UnderTabBarController: UITabBarController {
-    let firstVC = ViewController()
+    let firstVC = RentVC()
     let secondVC = ViewController()
     let thirdVC = LoginVC()
 

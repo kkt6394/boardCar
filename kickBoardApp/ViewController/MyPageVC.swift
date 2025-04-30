@@ -14,7 +14,7 @@ class MyPageVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "마이페이지"
-        view = myPageTableView
+        self.view = myPageTableView
 
     }
 }
