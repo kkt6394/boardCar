@@ -58,14 +58,21 @@ class MyPageTableView: UIView {
 
 extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
     
-    
+    enum TableViewSections: Int, CaseIterable {
+        case nameSection
+        case pointSection
+        case historySection
+        case shareInfoSection
+        case adSection
+    }
+
     // 섹션 개수
     func numberOfSections(in tableView: UITableView) -> Int {
         return TableViewCell.TableViewSections.allCases.count
     }
     // 섹션 안 셀 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sectionType = TableViewCell.TableViewSections(rawValue: section) else { return 0}
+        guard let sectionType = TableViewSections(rawValue: section) else { return 0}
         switch sectionType {
         case .nameSection:
             return 1
@@ -88,7 +95,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             label.font = UIFont(name: "SUIT-Bold", size: 18)
             label.textColor = .black
             label.text = {
-                switch TableViewCell.TableViewSections(rawValue: section) {
+                switch TableViewSections(rawValue: section) {
                 case .nameSection: return nil
                 case .pointSection: return nil
                 case .historySection: return "이용내역"
@@ -107,7 +114,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
     }
     // 커스텀 헤더 뷰 높이
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch TableViewCell.TableViewSections(rawValue: section) {
+        switch TableViewSections(rawValue: section) {
         case .historySection, .shareInfoSection:
             return 25
         default:
@@ -121,7 +128,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.id, for: indexPath) as? TableViewCell else {
             return UITableViewCell()
         }
-        let section = TableViewCell.TableViewSections(rawValue: indexPath.section)
+        let section = TableViewSections(rawValue: indexPath.section)
         switch section {
         case .nameSection:
             cell.configure(type: .name)

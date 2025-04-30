@@ -159,18 +159,18 @@ class LoginView: UIView {
         }
     }
     @objc
-    private func loginButtonTapped() {
+    func loginButtonTapped() {
         
         print("clicked")
-        let nextVC = ViewController()
+        let nextVC = UnderTabBarController()
 
         loginVC?.navigationController?.pushViewController(nextVC, animated: true)
 
     }
     @objc
-    private func joinButtonTapped() {
+    func joinButtonTapped() {
         print("clicked")
-        let nextVC = UnderTabBarController()
+        let nextVC = signupViewController()
         loginVC?.navigationController?.pushViewController(nextVC, animated: true)
 
     }
