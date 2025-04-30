@@ -9,11 +9,13 @@ import UIKit
 import NMapsMap
 
 class ViewController: UIViewController {
+    
+    let shareView = ShareViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let myView = NMFNaverMapView(frame: view.frame)
-                view.addSubview(myView)
+//        let myView = NMFNaverMapView(frame: view.frame)
+//                view.addSubview(myView)
     }
     
 
