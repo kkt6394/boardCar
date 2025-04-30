@@ -14,8 +14,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let myView = NMFNaverMapView(frame: view.frame)
-                view.addSubview(myView)
+//        let myView = NMFNaverMapView(frame: view.frame)
+//                view.addSubview(myView)
     }
     
 
