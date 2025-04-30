@@ -63,10 +63,6 @@ class ShareView: UIView {
         print("현재위치 버튼이 눌렸습니다")
     }
     
-    @objc func buttonTapped() {
-        print("공유하기 버튼이 눌렸습니다")
-    }
-    
 }
 
 
