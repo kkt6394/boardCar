@@ -31,9 +31,6 @@ class NameCell: UITableViewCell {
             nameLabel,
             greetingLabel
         ].forEach { contentView.addSubview($0) }
-//        helmetImageView.isHidden = false
-//        nameLabel.isHidden = false
-//        greetingLabel.isHidden = false
         helmetImageView.image = UIImage(named: "helmet")
         nameLabel.text = "최영건님,"
         nameLabel.font = UIFont(name: "GmarketSansMedium", size: 18)

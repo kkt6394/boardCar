@@ -14,11 +14,15 @@ class MyPageTableView: UIView {
     
     let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
+    let logoutButton = UIButton()
+    let deleteIdButton = UIButton()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         statusBarSetup()
         setupTableView()
         setupConstraints()
+        buttonSetup()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -27,6 +31,8 @@ class MyPageTableView: UIView {
     func statusBarSetup() {
         addSubview(statusBar)
         statusBar.text = "현재 상태 : 대여 중"
+        statusBar.font = UIFont(name: "GmarketSansMedium", size: 18)
+        statusBar.textAlignment = .center
         statusBar.textColor = .white
         statusBar.backgroundColor = .main
         statusBar.snp.makeConstraints {
@@ -35,20 +41,53 @@ class MyPageTableView: UIView {
             $0.height.equalTo(44)
         }
     }
+    func buttonSetup() {
+        [logoutButton, deleteIdButton]
+            .forEach { addSubview($0) }
+        logoutButton.setTitle("로그아웃", for: .normal)
+        logoutButton.setTitleColor(.black, for: .normal)
+        logoutButton.titleLabel?.font = UIFont(name: "SUIT-Light", size: 14)
+        logoutButton.backgroundColor = UIColor.font3
+        logoutButton.layer.cornerRadius = 8.0
+        logoutButton.clipsToBounds = true
+//        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        deleteIdButton.setTitle("회원탈퇴", for: .normal)
+        deleteIdButton.setTitleColor(.black, for: .normal)
+        deleteIdButton.titleLabel?.font = UIFont(name: "SUIT-Light", size: 12)
+        deleteIdButton.backgroundColor = UIColor.font3
+//        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        logoutButton.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+        }
+        deleteIdButton.snp.makeConstraints {
+            $0.top.equalTo(tableView.snp.bottom).offset(52)
+            $0.trailing.equalToSuperview().offset(32)
+        }
+
+
+    }
     //MARK: UI 설정 메서드
     private func setupTableView() {
+        self.backgroundColor = UIColor(red: 242/255, green: 242/255, blue: 247/255, alpha: 1.0)
         addSubview(tableView)
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.id)
+        tableView.register(NameCell.self, forCellReuseIdentifier: NameCell.id)
+        tableView.register(PointCell.self, forCellReuseIdentifier: PointCell.id)
+        tableView.register(HistoryCell.self, forCellReuseIdentifier: HistoryCell.id)
+        tableView.register(ShareCell.self, forCellReuseIdentifier: ShareCell.id)
+        tableView.register(AdCell.self, forCellReuseIdentifier: AdCell.id)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 20
-
+        tableView.estimatedRowHeight = 100
+        
     }
     //MARK: 제약 설정 메서드
     private func setupConstraints() {
         tableView.snp.makeConstraints {
-            $0.top.equalTo(statusBar.snp.bottom).offset(48)
+            $0.top.equalTo(statusBar.snp.bottom).offset(40)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
@@ -65,13 +104,14 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         case shareInfoSection
         case adSection
     }
-
+    
     // 섹션 개수
     func numberOfSections(in tableView: UITableView) -> Int {
-        return TableViewCell.TableViewSections.allCases.count
+        return TableViewSections.allCases.count
     }
     // 섹션 안 셀 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         guard let sectionType = TableViewSections(rawValue: section) else { return 0}
         switch sectionType {
         case .nameSection:
@@ -79,9 +119,10 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         case .pointSection:
             return 1
         case .historySection:
-            return 2
+            return 1
+        // 동적으로 개수 반환해줄 것, 수정예정
         case .shareInfoSection:
-            return 2
+            return 15
         case .adSection:
             return 1
         }
@@ -104,7 +145,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
                 case .none: return nil
                 }
             }()
-           return label
+            return label
         }()
         headerView.addSubview(label)
         label.snp.makeConstraints {
@@ -121,34 +162,28 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             return 0
         }
     }
-
     
     // 셀 내용 (섹션 별 내용 분기)
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.id, for: indexPath) as? TableViewCell else {
-            return UITableViewCell()
-        }
-        let section = TableViewSections(rawValue: indexPath.section)
+        guard let section = TableViewSections(rawValue: indexPath.section) else { return UITableViewCell() }
         switch section {
         case .nameSection:
-            cell.configure(type: .name)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: NameCell.id, for: indexPath) as? NameCell else { return UITableViewCell() }
+            return cell
         case .pointSection:
-            cell.configure(type: .point)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PointCell.id, for: indexPath) as? PointCell else { return UITableViewCell() }
+            return cell
         case .historySection:
-            if indexPath.row == 0 {
-                cell.configure(type: .historyBorrow)
-            } else {
-                cell.configure(type: .historyShare)
-            }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryCell.id, for: indexPath) as? HistoryCell else { return UITableViewCell() }
+            return cell
         case .shareInfoSection:
-            cell.configure(type: .shareInfo)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ShareCell.id, for: indexPath) as? ShareCell else { return UITableViewCell() }
+            return cell
+            
         case .adSection:
-            cell.configure(type: .ad)
-        case .none:
-            return UITableViewCell()
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: AdCell.id, for: indexPath) as? AdCell else { return UITableViewCell() }
+            return cell
         }
-        
-        return cell
-        
     }
 }
+

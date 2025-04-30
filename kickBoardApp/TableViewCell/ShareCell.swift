@@ -14,10 +14,11 @@ class ShareCell: UITableViewCell {
     private let kickBoardImage = UIImageView()
     private let kickBoardNameLabel = UILabel()
     private let periodLabel = UILabel()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupConfigure()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -26,9 +27,6 @@ class ShareCell: UITableViewCell {
     private func setupConfigure() {
         [kickBoardImage, kickBoardNameLabel, periodLabel]
             .forEach { contentView.addSubview($0) }
-//        kickBoardImage.isHidden = false
-//        kickBoardNameLabel.isHidden = false
-//        periodLabel.isHidden = false
         kickBoardImage.image = UIImage(named: "kickBoard")
         kickBoardNameLabel.text = "최애 붕붕이"
         kickBoardNameLabel.font = UIFont(name: "SUIT-SemiBold", size: 18)

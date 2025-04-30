@@ -33,13 +33,9 @@ class HistoryCell: UITableViewCell {
             shareImage,
             shareLabel
         ].forEach { contentView.addSubview($0) }
-//        borrowImage.isHidden = false
-//        borrowLabel.isHidden = false
         borrowImage.image = UIImage(named: "wheel")
         borrowLabel.text = "킥보드 대여 횟수 : 6회"
         borrowLabel.font = UIFont(name: "SUIT-Regular", size: 14)
-//        shareImage.isHidden = false
-//        shareLabel.isHidden = false
         shareImage.image = UIImage(named: "coin2")
         shareLabel.text = "최영건님의 킥보드는 2회 대여되었어요!"
         shareLabel.font = UIFont(name: "SUIT-Regular", size: 14)
@@ -49,22 +45,21 @@ class HistoryCell: UITableViewCell {
     private func setupConstraints() {
         borrowImage.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
-            $0.bottom.equalToSuperview().inset(8)
             $0.leading.equalToSuperview().offset(8)
         }
         borrowLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
-            $0.bottom.equalToSuperview().inset(8)
             $0.leading.equalTo(borrowImage.snp.trailing).offset(8)
         }
         shareImage.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
-            $0.bottom.equalToSuperview().inset(8)
+            $0.top.equalTo(borrowImage.snp.bottom).offset(8)
+            $0.bottom.equalToSuperview().offset(-8)
             $0.leading.equalToSuperview().offset(8)
+            
         }
         shareLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
-            $0.bottom.equalToSuperview().inset(8)
+            $0.top.equalTo(borrowLabel.snp.bottom).offset(8)
+            $0.bottom.equalToSuperview().offset(-8)
             $0.leading.equalTo(shareImage.snp.trailing).offset(8)
         }
     }

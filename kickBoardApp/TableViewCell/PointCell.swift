@@ -31,9 +31,6 @@ class PointCell: UITableViewCell {
             pointImageView,
             myPointLabel
         ].forEach { contentView.addSubview($0) }
-//        pointLabel.isHidden = false
-//        pointImageView.isHidden = false
-//        myPointLabel.isHidden = false
         pointLabel.text = "내 포인트"
         pointLabel.font = UIFont(name: "SUIT-Bold", size: 18)
         pointImageView.image = UIImage(named: "coin")
