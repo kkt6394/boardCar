@@ -13,25 +13,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    
+        
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-      
         window.overrideUserInterfaceStyle = UIUserInterfaceStyle.light
         
         let splashView = SplashView()
         window.rootViewController = splashView
-      
+        
+        self.window = window
         window.makeKeyAndVisible()
         
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            window.rootViewController = ViewController()
+            let loginVC = LoginVC()
+            let myPageVC = MyPageVC()
+            let nav = UINavigationController(rootViewController: loginVC)
+            
+            UIView.transition(with: self.window!,
+                              duration: 0.5,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                self.window?.rootViewController = nav
+            },
+                              completion: nil)
         }
-        
-        self.window = window
-}
+    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.

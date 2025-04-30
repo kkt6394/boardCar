@@ -10,8 +10,8 @@ import UIKit
 
 class UnderTabBarController: UITabBarController {
     let firstVC = RentVC()
-    let secondVC = ViewController()
-    let thirdVC = LoginVC()
+    let secondVC = ShareViewController()
+    let thirdVC = MyPageVC()
 
     override func viewDidLoad() {
         super.viewDidLoad()
