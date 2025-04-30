@@ -17,6 +17,8 @@ enum ViewMode {
 
 class RentView: UIView {
 
+    var selectedMarker = NMFMarker?.self
+
     let myView = NMFNaverMapView()
 
     private let networkService = NetworkService()
@@ -51,13 +53,26 @@ class RentView: UIView {
         return stackView
     }()
 
-    private lazy var rentButton: UIButton = {
+    lazy var rentButton: UIButton = {
         let button = UIButton()
         button.setTitle("대여하기", for: .normal)
         button.titleLabel?.font = UIFont(name: "SUIT-Bold", size: 20)
         button.backgroundColor = .main
         button.layer.cornerRadius = 15
-        button.addTarget(self, action: #selector(rentBtnTapped), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(rentBtnTapped), for: .touchUpInside)
+        return button
+    }()
+
+    lazy var returnButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("반납하기", for: .normal)
+        button.setTitleColor(.main, for: .normal)
+        button.titleLabel?.font = UIFont(name: "SUIT-Bold", size: 20)
+        button.backgroundColor = .sub3
+        button.layer.cornerRadius = 15
+        button.layer.borderWidth = 2
+        button.layer.borderColor = UIColor.main.cgColor
+//        button.addTarget(self, action: #selector(returnButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -78,7 +93,6 @@ class RentView: UIView {
         setupView()
         configureStackView()
         configureUI()
-        setMarker()
     }
 
     required init?(coder: NSCoder) {
@@ -86,7 +100,6 @@ class RentView: UIView {
         setupView()
         configureStackView()
         configureUI()
-        setMarker()
     }
 
     private func setupView() {
@@ -114,11 +127,12 @@ class RentView: UIView {
     }
 
     private func configureUI() {
-        [stackView, rentButton, currentLocationButton].forEach {
+        [stackView, rentButton, returnButton, currentLocationButton].forEach {
             addSubview($0)
         }
 
         rentButton.isHidden = true
+        returnButton.isHidden = true
 
         stackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(60)
@@ -135,6 +149,13 @@ class RentView: UIView {
             $0.trailing.equalToSuperview().offset(-120)
         }
 
+        returnButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-114)
+            $0.leading.equalToSuperview().offset(120)
+            $0.trailing.equalToSuperview().offset(-120)
+        }
+
         currentLocationButton.snp.makeConstraints {
             $0.width.height.equalTo(46)
             $0.trailing.equalToSuperview().offset(-25)
@@ -142,42 +163,14 @@ class RentView: UIView {
         }
     }
 
-    private func setMarker() {
-        let markers: [NMFMarker] = [
-            NMFMarker(position: NMGLatLng(lat: 37.5557, lng: 126.9708)),
-            NMFMarker(position: NMGLatLng(lat: 37.5560, lng: 126.9720)),
-            NMFMarker(position: NMGLatLng(lat: 37.5570, lng: 126.9700))
-        ]
-
-        // 네이버에서 제공하는 Overlay 핸들러(네이버 지도 마커의 터치 이벤트를 처리하는 클로저)
-        let handler: (NMFOverlay) -> Bool = { [weak self] overlay in
-            guard let marker = overlay as? NMFMarker else { return false }
-
-            let isSelected = marker.userInfo["selected"] as? Bool ?? false
-            if isSelected {
-                marker.iconImage = NMFOverlayImage(name: "kickBoard")
-                marker.userInfo["selected"] = false
-            } else {
-                marker.iconImage = NMFOverlayImage(name: "seletedKickBoard")
-                marker.userInfo["selected"] = true
-                self?.rentButton.isHidden = false
-            }
-
-            return true
-        }
-
-        for marker in markers {
-            marker.mapView = myView.mapView
-            marker.iconImage = NMFOverlayImage(name: "kickBoard")
-            marker.userInfo["selected"] = false
-            marker.touchHandler = handler
-        }
+    func setMarker(_ marker: NMFMarker) {
+        marker.mapView = myView.mapView
     }
 
-    @objc
-    private func rentBtnTapped() {
-        print("대여하기 버튼이 눌렸습니다")
-    }
+//    @objc
+//    private func returnButtonTapped() {
+//        print("대여하기 버튼이 눌렸습니다")
+//    }
 
 //    @objc
 //    private func locationBtnTapped() {
@@ -235,8 +228,4 @@ extension RentView: UITextViewDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.endEditing(true)
     }
-}
-
-extension RentView: NMFMapViewTouchDelegate {
-
 }
