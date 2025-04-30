@@ -10,16 +10,30 @@ import SnapKit
 
 class MyPageTableView: UIView {
     
+    let statusBar = UITextView()
+    
     let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        statusBarSetup()
         setupTableView()
         setupConstraints()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
+    }
+    func statusBarSetup() {
+        addSubview(statusBar)
+        statusBar.text = "현재 상태 : 대여 중"
+        statusBar.textColor = .white
+        statusBar.backgroundColor = .main
+        statusBar.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide)
+            $0.width.equalToSuperview()
+            $0.height.equalTo(44)
+        }
     }
     //MARK: UI 설정 메서드
     private func setupTableView() {
@@ -34,7 +48,9 @@ class MyPageTableView: UIView {
     //MARK: 제약 설정 메서드
     private func setupConstraints() {
         tableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(statusBar.snp.bottom).offset(48)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
     
@@ -93,7 +109,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch TableViewCell.TableViewSections(rawValue: section) {
         case .historySection, .shareInfoSection:
-            return 30
+            return 25
         default:
             return 0
         }
@@ -112,7 +128,11 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         case .pointSection:
             cell.configure(type: .point)
         case .historySection:
-            cell.configure(type: .history)
+            if indexPath.row == 0 {
+                cell.configure(type: .historyBorrow)
+            } else {
+                cell.configure(type: .historyShare)
+            }
         case .shareInfoSection:
             cell.configure(type: .shareInfo)
         case .adSection:
