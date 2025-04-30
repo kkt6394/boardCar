@@ -173,9 +173,7 @@ class signupViewController: UIViewController {
             print("이메일: \(user.email), 이름: \(user.name)")
             // 디버깅용으로 콘솔에 사용자 목록을 출력함.
         }
-        
-//        dismiss(animated: true, completion: nil)
-              // dismiss(animated:)는 회원가입뷰를 닫고 로그인뷰로 돌아갈 수 있게 해주는 역할을 한다.
+        self.navigationController?.popViewController(animated: true)
     }
         
         
