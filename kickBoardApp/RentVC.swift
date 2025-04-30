@@ -25,4 +25,3 @@ class RentVC: UIViewController {
         super.viewDidLoad()
     }
 }
-
