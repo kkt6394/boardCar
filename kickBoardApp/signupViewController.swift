@@ -28,37 +28,58 @@ class signupViewController: UIViewController {
     
     func setupUI() {
         
-        fitstLabel.text = "회원가입을 위해\n정보를 입력해주세요"
+        fitstLabel.text = "회원가입을 위해\n정보를 입력해주세요."
         fitstLabel.textAlignment = .left
         fitstLabel.numberOfLines = 0
         fitstLabel.font = UIFont(name: "SUIT-Regular", size: 30)
         
         emailLabel.text = "이메일을 입력해주세요."
-        emailLabel.font = UIFont(name: "SUIT-SemiBold", size: 15)
+        emailLabel.font = UIFont(name: "SUIT-Bold", size: 15)
         
-        emailTextField.placeholder = "이메일"
-//        emailTextField.layer.borderColor =
+        emailTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
+        emailTextField.leftViewMode = .always
+        emailTextField.placeholder = "boardcar@gmail.com"
+        emailTextField.font = UIFont(name: "SUIT-SemiBold", size: 13)
+        emailTextField.layer.borderWidth = 1
+        emailTextField.backgroundColor = .sub3
+        emailTextField.layer.borderColor = UIColor.main.cgColor
+        emailTextField.layer.cornerRadius = 10
         emailTextField.borderStyle = .roundedRect
         
         passwordLabel.text = "비밀번호를 입력해주세요."
-        passwordLabel.font = UIFont(name: "SUIT-SemiBold", size: 15)
+        passwordLabel.font = UIFont(name: "SUIT-Bold", size: 15)
         
+        passwordTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
+        passwordTextField.leftViewMode = .always
         passwordTextField.placeholder = "비밀번호"
-//        passwordTextField.layer.borderColor =
+        passwordTextField.font = UIFont(name: "SUIT-SemiBold", size: 13)
+        passwordTextField.layer.borderWidth = 1
+        passwordTextField.backgroundColor = .sub3
+        passwordTextField.layer.borderColor = UIColor.main.cgColor
+        passwordTextField.layer.cornerRadius = 10
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.isSecureTextEntry = true
         
         nameLabel.text = "이름을 입력해주세요."
-        nameLabel.font = UIFont(name: "SUIT-SemiBold", size: 15)
+        nameLabel.font = UIFont(name: "SUIT-Bold", size: 15)
         
+        nameTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
+        nameTextField.leftViewMode = .always
         nameTextField.placeholder = "이름"
-//        nameTextField.layer.borderColor =
+        nameTextField.font = UIFont(name: "SUIT-SemiBold", size: 13)
+        nameTextField.layer.borderWidth = 1
+        nameTextField.backgroundColor = .sub3
+        nameTextField.layer.borderColor = UIColor.main.cgColor
+        nameTextField.layer.cornerRadius = 10
+        nameTextField.backgroundColor = .sub3
         nameTextField.borderStyle = .roundedRect
         
         signupButton.setTitle("회원가입", for: .normal)
+        signupButton.setTitleColor(.font4, for: .normal)
         signupButton.layer.borderWidth = 1
         signupButton.layer.cornerRadius = 22
-        signupButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        signupButton.backgroundColor = .main
+        signupButton.titleLabel?.font = UIFont(name: "SUIT-Thin", size: 20)
         signupButton.addTarget(self, action: #selector(signup), for: .touchUpInside)
 
         // 뷰에 추가
@@ -66,51 +87,50 @@ class signupViewController: UIViewController {
             view.addSubview($0)
         }
 
-        // SnapKit 제약 설정
         fitstLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(180)
             $0.leading.trailing.equalToSuperview().inset(30)
         }
         
         emailLabel.snp.makeConstraints {
-            $0.top.equalTo(fitstLabel.snp.bottom).offset(35)
-            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.top.equalTo(fitstLabel.snp.bottom).offset(40)
+            $0.leading.trailing.equalToSuperview().inset(24)
         }
         
 
         emailTextField.snp.makeConstraints {
             $0.top.equalTo(fitstLabel.snp.bottom).offset(65)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(44)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.height.equalTo(40)
         }
         
         passwordLabel.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.leading.trailing.equalToSuperview().inset(24)
         }
 
         passwordTextField.snp.makeConstraints {
             $0.top.equalTo(emailTextField.snp.bottom).offset(45)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(44)
+            $0.height.equalTo(40)
         }
         
         nameLabel.snp.makeConstraints {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(20)
-            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.leading.trailing.equalToSuperview().inset(24)
         }
 
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(passwordTextField.snp.bottom).offset(45)
             $0.leading.trailing.equalTo(emailTextField)
-            $0.height.equalTo(44)
+            $0.height.equalTo(40)
         }
 
         signupButton.snp.makeConstraints {
             $0.top.equalTo(nameTextField.snp.bottom).offset(45)
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(50)
-            $0.width.equalTo(200)
+            $0.height.equalTo(44)
+            $0.width.equalTo(212)
         }
     }
     
@@ -151,7 +171,13 @@ class signupViewController: UIViewController {
         print("회원가입 완료! 저장된 사용자 목록:")
         savedUsers.forEach { user in
             print("이메일: \(user.email), 이름: \(user.name)")
+            // 디버깅용으로 콘솔에 사용자 목록을 출력함.
         }
+        
+//        dismiss(animated: true, completion: nil)
+              // dismiss(animated:)는 회원가입뷰를 닫고 로그인뷰로 돌아갈 수 있게 해주는 역할을 한다.
+    }
+        
         
         func loadUserDatas() -> [User] {
             if let data = UserDefaults.standard.data(forKey: "savedUsers"),
@@ -159,21 +185,15 @@ class signupViewController: UIViewController {
                 return users
             }
             return []
+            // 필요할 때 UserDefaults에서 사용자 목록을 불러오는 유틸 함수이다.
+            // 로그인 화면에서 사용하거나 디버깅용으로 쓸 떄 좋다.
         }
-        
-        
-        
- 
-        
-        
-        
-        // 회원가입 완료 후 로그인 화면으로 돌아가기
-        dismiss(animated: true, completion: nil)
-    }
-    
+  
     func showAlert(message: String) {
         let alert = UIAlertController(title: "오류", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "완료", style: .default))
         present(alert, animated: true)
     }
+    
+    
 }
