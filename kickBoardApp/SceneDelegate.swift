@@ -18,10 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         window.overrideUserInterfaceStyle = UIUserInterfaceStyle.light
-        
+
         let splashView = SplashView()
         window.rootViewController = splashView
-        
+
         self.window = window
         window.makeKeyAndVisible()
        
