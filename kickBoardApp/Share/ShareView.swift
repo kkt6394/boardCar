@@ -25,13 +25,15 @@ class ShareView: UIView {
         setupUI()
         configureUI()
         
-        currentButton.addTarget(self, action: #selector(currentButtonTapped), for: .touchUpInside)
+        mapView.zoomLevel = 14
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
         configureUI()
+        
+        
     }
     
     private func setupUI() {
@@ -124,11 +126,6 @@ class ShareView: UIView {
             $0.centerY.equalTo(pickerView)
         }
         
-    }
-
-    
-    @objc func currentButtonTapped() {
-        print("현재위치 버튼이 눌렸습니다")
     }
         
 }

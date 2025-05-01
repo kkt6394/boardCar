@@ -19,12 +19,18 @@ class ShareViewController: UIViewController {
     let days = Array(1...31).map { String(format: "%02d", $0) }
     let years = Array(2025...2030).map { "\($0)" }
     
+    let locationManager = CLLocationManager()
+    
     override func loadView() {
         view = shareView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupMyLocationButton()
+        
+        setLocation()
         
         shareView.mapView.addCameraDelegate(delegate: self)
         
@@ -135,6 +141,44 @@ class ShareViewController: UIViewController {
 
     }
     
+    @objc func myLocationButtonTapped() {
+
+        // 상태 확인(위치 정보 제공에 동의했는지 등을 확인하는 부분)
+        let status: CLAuthorizationStatus
+        if #available(iOS 14.0, *) { // authorizationStatus 메서드는 iOS 14부터 생긴 것
+            status = locationManager.authorizationStatus
+        } else {   // 따라서 iOS 14 이하 버전은 CLLocationManager에 있던 메서드를 사용함
+            status = CLLocationManager.authorizationStatus()
+        }
+
+        // 위치 정보 동의 상태가 항상 허용이거나 사용할 때 허용인 경우
+        if status == .authorizedAlways || status == .authorizedWhenInUse {
+            // 현재 위치를 currentLocation에 담고
+            if let currentLocation = locationManager.location {
+                // 해당 위치로 카메라 이동
+                moveCameraToCurrentLocation(currentLocation.coordinate)
+            // 그렇지 않을 때는 다시 위치정보 요청
+            } else {
+                locationManager.requestLocation()
+            }
+            // 위치 정보 동의 상태가 사용할 때 한번만 허용인 경우
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    
+    private func setLocation() {
+        // CLLocationManager의 delegate 설정
+        locationManager.delegate = self
+        self.shareView.mapView.positionMode = .direction // 위치정보 모드(카메라 따라다니는거)
+        locationManager.requestWhenInUseAuthorization()
+    }
+    
+    private func setupMyLocationButton() {
+        let myBtn = self.shareView.currentButton
+        myBtn.addTarget(self, action: #selector(myLocationButtonTapped), for: .touchUpInside)
+    }
+    
 }
     
 extension ShareViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -183,30 +227,20 @@ extension ShareViewController: NMFMapViewCameraDelegate {
     }
 }
 
-// kickBoardHistory 에 킥보드정보를 업로드해주고, 이 업로드 된 정보를 savedusers에 올려준다
+extension ShareViewController: CLLocationManagerDelegate {
+    // MARK: 현위치로 업데이트 해주는 부분. 카메라도 해당 위치로 이동함
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        moveCameraToCurrentLocation(location.coordinate)
+        print("위도: \(location.coordinate.latitude), 경도: \(location.coordinate.longitude)")
+    }
+    private func moveCameraToCurrentLocation(_ coordinate: CLLocationCoordinate2D) {
+        DispatchQueue.main.async {
+            let latLng = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
+            let cameraUpdate = NMFCameraUpdate(scrollTo: latLng)
+            cameraUpdate.animation = .easeIn
+            self.shareView.mapView.moveCamera(cameraUpdate)
+        }
+    }
+}
 
-/*
- 키값 kickBoardHistory, savedUsers, currentUserEmail
- 저장된 
-
- import Foundation
-
- struct User: Codable {
-     var email: String
-     var password: String
-     var name: String
-     var point: Int = 2000
-     var count: Int = 0
-     var shareKickBoard: [KickBoard] = []
- }
-
- struct KickBoard: Codable {
-     var name: String = ""
-     var year: String = ""
-     var month: String = ""
-     var day: String = ""
-     var lat: Double
-     var lon: Double
-     var isRent: Bool = false
- }
- */
