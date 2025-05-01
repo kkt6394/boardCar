@@ -10,7 +10,8 @@ import SnapKit
 import NMapsMap
 
 class ShareView: UIView {
-        
+    
+    let centerMark = UIImageView()
     let mapView = NMFMapView()
     let customView = UIView()
     let kickBoardName = UITextField()
@@ -36,9 +37,11 @@ class ShareView: UIView {
     private func setupUI() {
         backgroundColor = .clear
         
-        [mapView, customView, currentButton].forEach { addSubview($0) }
+        [mapView, customView, currentButton, centerMark].forEach { addSubview($0) }
         
         [kickBoardName, pickerView, sharedButton, dateLabel].forEach { customView.addSubview($0) }
+        
+        centerMark.image = UIImage(named: "centerMark")
         
         customView.backgroundColor = .sub3
         customView.layer.cornerRadius = 13.0
@@ -77,6 +80,10 @@ class ShareView: UIView {
         
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        centerMark.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
         
         customView.snp.makeConstraints {
@@ -126,6 +133,8 @@ class ShareView: UIView {
         
 }
     
+
+
 
 
 
