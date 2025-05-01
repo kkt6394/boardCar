@@ -7,17 +7,24 @@
 
 import Foundation
 
-struct UserProfile: Codable {
+//struct User: Codable {
+//    let email: String
+//    let password: String
+//    let name: String
+//}
+
+struct User: Codable {
     var email: String
     var password: String
     var name: String
-    var point: Int
-    var kickBoardInfo: KickBoardProfile
+    var point: Int = 0
+    var kickBoardInfo: KickBoard
 }
 
-struct KickBoardProfile: Codable {
-    var name: String
-    var rentPeriod: Date
-    var coordinates: String
+struct KickBoard: Codable {
+    var name: String = ""
+    var rentPeriod: Date = Date()
+    var lat: Double = 0.0
+    var lon: Double = 0.0
     
 }

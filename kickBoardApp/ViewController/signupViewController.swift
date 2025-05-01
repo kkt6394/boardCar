@@ -134,11 +134,7 @@ class signupViewController: UIViewController {
         }
     }
     
-    struct User: Codable {
-        let email: String
-        let password: String
-        let name: String
-    }
+    
     
     @objc func signup() {
         guard let email = emailTextField.text,  // guard let은 안전하게 값이 있는지 확인하는 코드이다.
@@ -149,7 +145,7 @@ class signupViewController: UIViewController {
             return
         }
         
-        let newUser = User(email: email, password: password, name: name) // 새로 입력된 데이터를 바탕으로 User 구조체를 만든 것.
+        let newUser = User(email: email, password: password, name: name, point: 0, kickBoardInfo: KickBoard()) // 새로 입력된 데이터를 바탕으로 User 구조체를 만든 것.
         
         var savedUsers: [User] = [] // 만약 저장된 게 없으면 빈 배열으로 시작한다.
         if let data = UserDefaults.standard.data(forKey: "savedUsers"), // UserDefaults에 저장된 사용자 목록이 있으면 data에서 꺼내고
@@ -173,9 +169,7 @@ class signupViewController: UIViewController {
             print("이메일: \(user.email), 이름: \(user.name)")
             // 디버깅용으로 콘솔에 사용자 목록을 출력함.
         }
-        
-//        dismiss(animated: true, completion: nil)
-              // dismiss(animated:)는 회원가입뷰를 닫고 로그인뷰로 돌아갈 수 있게 해주는 역할을 한다.
+        self.navigationController?.popViewController(animated: true)
     }
         
         
