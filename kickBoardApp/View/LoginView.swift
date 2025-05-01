@@ -172,13 +172,13 @@ class LoginView: UIView {
         print("불러온 사용자 목록: \(savedUsers)")
         
         if let matchedUser = savedUsers.first(where: { $0.email == email && $0.password == password}) {
-            let alert = UIAlertController(title: nil, message: "\(matchedUser.name)님, 환영합니다!", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
+            delegate?.showAlert(message: "\(matchedUser.name)님, 환영합니다!")
+            UserDefaults.standard.set(matchedUser.email, forKey: "currentUserEmail")
                 let nextVC = UnderTabBarController()
                 self.loginVC?.navigationController?.pushViewController(nextVC, animated: true)
 
-            }))
-            loginVC?.present(alert, animated: true)
+            
+        
         } else {
             delegate?.showAlert(message: "이메일 또는 비밀번호가 일치하지 않습니다.")
         }

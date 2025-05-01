@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 
 class MyPageTableView: UIView {
+    var user: User?
     
     let statusBar = UITextView()
     
@@ -169,6 +170,9 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         switch section {
         case .nameSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NameCell.id, for: indexPath) as? NameCell else { return UITableViewCell() }
+            if let user = self.user {
+                cell.configure(with: user)
+            }
             return cell
         case .pointSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PointCell.id, for: indexPath) as? PointCell else { return UITableViewCell() }
