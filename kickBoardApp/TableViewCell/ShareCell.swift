@@ -50,6 +50,9 @@ class ShareCell: UITableViewCell {
             $0.leading.equalTo(kickBoardImage.snp.trailing).offset(20)
         }
     }
-    
+    func configure(with kickBoard: KickBoard) {
+        kickBoardNameLabel.text = kickBoard.name
+        periodLabel.text = "\(kickBoard.year)년 \(kickBoard.month)월 \(kickBoard.day)일 까지"
+    }
 }
 

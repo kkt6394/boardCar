@@ -30,6 +30,7 @@ class MyPageVC: UIViewController {
         if let user = loadCurrentUser() {
             myPageTableView.user = user
             myPageTableView.tableView.reloadData()
+            myPageTableView.updateStatusBar()
         }
     }
     
