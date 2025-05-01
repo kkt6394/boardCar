@@ -191,7 +191,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             if let user = self.user {
                 cell.configure(with: user)
             }
-
+            
             return cell
         case .shareInfoSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ShareCell.id, for: indexPath) as? ShareCell,
@@ -206,17 +206,54 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         }
     }
     func updateStatusBar() {
-        guard let user = user else { return }
+        // 1. UserDefaults에서 현재 이메일 가져오기
+        guard let currentEmail = UserDefaults.standard.string(forKey: "currentUserEmail") else {
+            print("로그인 정보 없음")
+            return
+        }
         
-        if user.shareKickBoard.contains(where: { $0.isRent }) {
+        // 2. UserDefaults에서 userList 가져오기
+        guard let userData = UserDefaults.standard.data(forKey: "savedUsers"),
+              let userList = try? JSONDecoder().decode([User].self, from: userData) else {
+            print("유저 목록 불러오기 실패")
+            return
+        }
+        
+        // 3. 현재 로그인한 유저 찾기
+        guard let currentUser = userList.first(where: { $0.email == currentEmail }) else {
+            print("해당 이메일의 유저 없음")
+            return
+        }
+        
+        // 4. 해당 유저의 킥보드 중 대여중인 것이 있는지 확인
+        let isRenting = currentUser.shareKickBoard.contains(where: { $0.isRent })
+        
+        // 5. 상태바 업데이트
+        if isRenting {
             statusBar.text = "현재 상태 : 대여 중"
             statusBar.textColor = .white
             statusBar.backgroundColor = .main
         } else {
             statusBar.text = "현재 상태 : 대여 가능"
-            statusBar.backgroundColor = .sub3
             statusBar.textColor = .main
+            statusBar.backgroundColor = .sub3
         }
     }
-}
+        
+        //    func updateStatusBar() {
+        //        guard let user = user else { return }
+        //
+        //
+        //        if user.shareKickBoard.contains(where: { $0.isRent }) {
+        //            statusBar.text = "현재 상태 : 대여 중"
+        //            statusBar.textColor = .white
+        //            statusBar.backgroundColor = .main
+        //        } else {
+        //            statusBar.text = "현재 상태 : 대여 가능"
+        //            statusBar.backgroundColor = .sub3
+        //            statusBar.textColor = .main
+        //        }
+        //    }
+    }
+    
 

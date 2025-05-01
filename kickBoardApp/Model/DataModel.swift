@@ -23,5 +23,5 @@ struct KickBoard: Codable {
     var day: String = ""
     var lat: Double
     var lon: Double
-    var isRent: Bool = true
+    var isRent: Bool = false
 }
