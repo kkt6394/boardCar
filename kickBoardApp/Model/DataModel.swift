@@ -13,7 +13,7 @@ struct User: Codable {
     var name: String
     var point: Int = 2000
     var count: Int = 0
-    var shareKickBoar: [KickBoard] = []
+    var shareKickBoard: [KickBoard] = []
 }
 
 struct KickBoard: Codable {

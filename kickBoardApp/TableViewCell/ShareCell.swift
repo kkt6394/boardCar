@@ -14,6 +14,7 @@ class ShareCell: UITableViewCell {
     private let kickBoardImage = UIImageView()
     private let kickBoardNameLabel = UILabel()
     private let periodLabel = UILabel()
+    private let stackView = UIStackView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -25,8 +26,13 @@ class ShareCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     private func setupConfigure() {
-        [kickBoardImage, kickBoardNameLabel, periodLabel]
+        [kickBoardImage, stackView]
             .forEach { contentView.addSubview($0) }
+        [kickBoardNameLabel, periodLabel].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        stackView.axis = .vertical
+        stackView.alignment = .leading
         kickBoardImage.image = UIImage(named: "kickBoard")
         kickBoardNameLabel.text = "최애 붕붕이"
         kickBoardNameLabel.font = UIFont(name: "SUIT-SemiBold", size: 18)
@@ -39,15 +45,14 @@ class ShareCell: UITableViewCell {
             $0.bottom.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().offset(10)
         }
-        kickBoardNameLabel.snp.makeConstraints {
+        stackView.snp.makeConstraints {
             $0.centerY.equalTo(kickBoardImage.snp.centerY)
             $0.leading.equalTo(kickBoardImage.snp.trailing).offset(20)
         }
-        periodLabel.snp.makeConstraints {
-            $0.top.equalTo(kickBoardNameLabel.snp.bottom).offset(2)
-            $0.leading.equalTo(kickBoardImage.snp.trailing).offset(20)
-        }
     }
-    
+    func configure(with kickBoard: KickBoard) {
+        kickBoardNameLabel.text = kickBoard.name
+        periodLabel.text = "\(kickBoard.year)년 \(kickBoard.month)월 \(kickBoard.day)일 까지"
+    }
 }
 

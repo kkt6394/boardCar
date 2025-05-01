@@ -34,7 +34,7 @@ class PointCell: UITableViewCell {
         pointLabel.text = "내 포인트"
         pointLabel.font = UIFont(name: "SUIT-Bold", size: 18)
         pointImageView.image = UIImage(named: "coin")
-        myPointLabel.text = "2,000"
+        myPointLabel.text = "0"
         myPointLabel.font = UIFont(name: "SUIT-SemiBold", size: 18)
     }
     private func setupConstraints() {
@@ -53,5 +53,9 @@ class PointCell: UITableViewCell {
             $0.trailing.equalTo(myPointLabel.snp.leading).offset(-16)
         }
     }
+    func configure(with user: User) {
+        myPointLabel.text = "\(user.point)"
+    }
+    
 }
 
