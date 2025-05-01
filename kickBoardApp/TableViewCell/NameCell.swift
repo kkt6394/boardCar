@@ -53,5 +53,8 @@ class NameCell: UITableViewCell {
             $0.top.equalTo(nameLabel.snp.bottom).offset(4)
         }
     }
+    func configure(with user: User) {
+        nameLabel.text = "\(user.name)님,"
+    }
 }
 

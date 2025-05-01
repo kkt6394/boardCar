@@ -62,7 +62,7 @@ class LoginView: UIView {
         //MARK: password 텍스트 필드 UI
         passwordTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
         passwordTextField.leftViewMode = .always
-
+        
         passwordTextField.placeholder = "비밀번호"
         passwordTextField.isSecureTextEntry = true
         passwordTextField.font = UIFont(name: "SUIT-SemiBold", size: 16)
@@ -70,7 +70,7 @@ class LoginView: UIView {
         passwordTextField.layer.borderWidth = 1.0
         passwordTextField.layer.borderColor = UIColor.main.cgColor
         passwordTextField.backgroundColor = UIColor.sub3
-
+        
         
         //MARK: 로그인 버튼 UI
         loginButton.setTitle("로그인", for: .normal)
@@ -83,7 +83,7 @@ class LoginView: UIView {
         //MARK: 아이디 / 비밀번호 찾기 UI
         findButton.setTitle("아이디 / 비밀번호 찾기", for: .normal)
         findButton.titleLabel?.font = UIFont(name: "SUIT-Regular", size: 14)
-
+        
         findButton.setTitleColor(.gray, for: .normal)
         
         //MARK: 스택뷰(코인이미지 + 포인트레이블)
@@ -92,7 +92,7 @@ class LoginView: UIView {
         stackView.alignment = .center
         stackView.addArrangedSubview(coinImage)
         stackView.addArrangedSubview(pointLabel)
-
+        
         //MARK: 코인 이미지 UI
         coinImage.image = UIImage(named: "coin")
         
@@ -172,20 +172,23 @@ class LoginView: UIView {
         print("불러온 사용자 목록: \(savedUsers)")
         
         if let matchedUser = savedUsers.first(where: { $0.email == email && $0.password == password}) {
+            UserDefaults.standard.set(matchedUser.email, forKey: "currentUserEmail")
+            
             let alert = UIAlertController(title: nil, message: "\(matchedUser.name)님, 환영합니다!", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
+                
                 let nextVC = UnderTabBarController()
                 self.loginVC?.navigationController?.pushViewController(nextVC, animated: true)
-
             }))
-            loginVC?.present(alert, animated: true)
+            self.loginVC?.present(alert, animated: true, completion: nil)
+            
         } else {
             delegate?.showAlert(message: "이메일 또는 비밀번호가 일치하지 않습니다.")
         }
         
         
         print("clicked")
-
+        
     }
     func loadUserData() -> [User] {
         if let data = UserDefaults.standard.data(forKey: "savedUsers"),
@@ -199,8 +202,8 @@ class LoginView: UIView {
         print("clicked")
         let nextVC = signupViewController()
         loginVC?.navigationController?.pushViewController(nextVC, animated: true)
-
+        
     }
     
-
+    
 }

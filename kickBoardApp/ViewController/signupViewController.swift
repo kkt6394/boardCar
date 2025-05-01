@@ -145,7 +145,8 @@ class signupViewController: UIViewController {
             return
         }
         
-        let newUser = User(email: email, password: password, name: name, point: 0, kickBoardInfo: KickBoard()) // 새로 입력된 데이터를 바탕으로 User 구조체를 만든 것.
+         // 새로 입력된 데이터를 바탕으로 User 구조체를 만든 것.
+        let newUser = User(email: email, password: password, name: name)
         
         var savedUsers: [User] = [] // 만약 저장된 게 없으면 빈 배열으로 시작한다.
         if let data = UserDefaults.standard.data(forKey: "savedUsers"), // UserDefaults에 저장된 사용자 목록이 있으면 data에서 꺼내고

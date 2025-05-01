@@ -28,7 +28,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             let loginVC = LoginVC()
-            let myPageVC = MyPageVC()
             let nav = UINavigationController(rootViewController: loginVC)
             
             UIView.transition(with: self.window!,
