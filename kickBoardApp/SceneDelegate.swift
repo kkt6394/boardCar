@@ -24,21 +24,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = window
         window.makeKeyAndVisible()
-        
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//            let loginVC = LoginVC()
-//            let myPageVC = MyPageVC()
-//            let nav = UINavigationController(rootViewController: loginVC)
-//            
-//            UIView.transition(with: self.window!,
-//                              duration: 0.5,
-//                              options: .transitionCrossDissolve,
-//                              animations: {
-//                self.window?.rootViewController = nav
-//            },
-//                              completion: nil)
-//        }
+       
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            let loginVC = LoginVC()
+            let nav = UINavigationController(rootViewController: loginVC)
+            
+            UIView.transition(with: self.window!,
+                              duration: 0.5,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                self.window?.rootViewController = nav
+            },
+                              completion: nil)
+        }
+      
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

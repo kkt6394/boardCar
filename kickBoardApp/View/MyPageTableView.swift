@@ -9,11 +9,12 @@ import UIKit
 import SnapKit
 
 class MyPageTableView: UIView {
+    var user: User?
     
-    let statusBar = UITextView()
+    let statusBar = UILabel()
     
     let tableView = UITableView(frame: .zero, style: .insetGrouped)
-    
+    let footerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 120))
     let logoutButton = UIButton()
     let deleteIdButton = UIButton()
     
@@ -43,28 +44,35 @@ class MyPageTableView: UIView {
     }
     func buttonSetup() {
         [logoutButton, deleteIdButton]
-            .forEach { addSubview($0) }
+            .forEach { footerView.addSubview($0) }
+        tableView.tableFooterView = footerView
+
         logoutButton.setTitle("로그아웃", for: .normal)
         logoutButton.setTitleColor(.black, for: .normal)
         logoutButton.titleLabel?.font = UIFont(name: "SUIT-Light", size: 14)
         logoutButton.backgroundColor = UIColor.font3
         logoutButton.layer.cornerRadius = 8.0
         logoutButton.clipsToBounds = true
+        logoutButton.backgroundColor = .font3
 //        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
         deleteIdButton.setTitle("회원탈퇴", for: .normal)
         deleteIdButton.setTitleColor(.black, for: .normal)
         deleteIdButton.titleLabel?.font = UIFont(name: "SUIT-Light", size: 12)
-        deleteIdButton.backgroundColor = UIColor.font3
+        deleteIdButton.backgroundColor = .white
 //        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
         logoutButton.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom).offset(16)
-            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(20)
+                $0.centerX.equalToSuperview()
+                $0.width.equalTo(106)
+                $0.height.equalTo(27)
         }
         deleteIdButton.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom).offset(52)
-            $0.trailing.equalToSuperview().offset(32)
+            $0.top.equalTo(logoutButton.snp.bottom).offset(12)
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.width.equalTo(42)
+            $0.height.equalTo(15)
         }
 
 
@@ -89,7 +97,7 @@ class MyPageTableView: UIView {
         tableView.snp.makeConstraints {
             $0.top.equalTo(statusBar.snp.bottom).offset(40)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(50)
         }
     }
     
@@ -120,9 +128,8 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             return 1
         case .historySection:
             return 1
-        // 동적으로 개수 반환해줄 것, 수정예정
         case .shareInfoSection:
-            return 15
+            return user?.shareKickBoard.count ?? 0
         case .adSection:
             return 1
         }
@@ -169,20 +176,46 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         switch section {
         case .nameSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NameCell.id, for: indexPath) as? NameCell else { return UITableViewCell() }
+            if let user = self.user {
+                cell.configure(with: user)
+            }
             return cell
         case .pointSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PointCell.id, for: indexPath) as? PointCell else { return UITableViewCell() }
+            if let user = self.user {
+                cell.configure(with: user)
+            }
             return cell
         case .historySection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryCell.id, for: indexPath) as? HistoryCell else { return UITableViewCell() }
+            if let user = self.user {
+                cell.configure(with: user)
+            }
+
             return cell
         case .shareInfoSection:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ShareCell.id, for: indexPath) as? ShareCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ShareCell.id, for: indexPath) as? ShareCell,
+                  let user = self.user else { return UITableViewCell() }
+            let kickBoard = user.shareKickBoard[indexPath.row]
+            cell.configure(with: kickBoard)
             return cell
             
         case .adSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: AdCell.id, for: indexPath) as? AdCell else { return UITableViewCell() }
             return cell
+        }
+    }
+    func updateStatusBar() {
+        guard let user = user else { return }
+        
+        if user.shareKickBoard.contains(where: { $0.isRent }) {
+            statusBar.backgroundColor = .main
+        } else {
+            statusBar.text = "현재 상태 : 대여 가능"
+            statusBar.backgroundColor = .sub3
+            statusBar.textColor = .main
+
+        
         }
     }
 }
