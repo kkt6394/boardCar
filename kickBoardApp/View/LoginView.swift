@@ -10,6 +10,7 @@ import SnapKit
 
 class LoginView: UIView {
     
+    weak var delegate: LoginViewDelegate?
     // 이 클래스는 UIView, 어느 뷰 컨트롤러에서 작동할 지 정해야함.
     weak var loginVC: LoginVC?
     
@@ -160,12 +161,38 @@ class LoginView: UIView {
     }
     @objc
     func loginButtonTapped() {
+        guard let email = idTextField.text,
+              let password = passwordTextField.text,
+              !email.isEmpty, !password.isEmpty else {
+            delegate?.showAlert(message: "이메일과 비밀번호를 입력해주세요.")
+            return
+        }
+        
+        let savedUsers = loadUserData()
+        print("불러온 사용자 목록: \(savedUsers)")
+        
+        if let matchedUser = savedUsers.first(where: { $0.email == email && $0.password == password}) {
+            let alert = UIAlertController(title: nil, message: "\(matchedUser.name)님, 환영합니다!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { UIAlertAction in
+                let nextVC = UnderTabBarController()
+                self.loginVC?.navigationController?.pushViewController(nextVC, animated: true)
+
+            }))
+            loginVC?.present(alert, animated: true)
+        } else {
+            delegate?.showAlert(message: "이메일 또는 비밀번호가 일치하지 않습니다.")
+        }
+        
         
         print("clicked")
-        let nextVC = UnderTabBarController()
 
-        loginVC?.navigationController?.pushViewController(nextVC, animated: true)
-
+    }
+    func loadUserData() -> [User] {
+        if let data = UserDefaults.standard.data(forKey: "savedUsers"),
+           let users = try? JSONDecoder().decode([User].self, from: data) {
+            return users
+        }
+        return []
     }
     @objc
     func joinButtonTapped() {
@@ -174,4 +201,6 @@ class LoginView: UIView {
         loginVC?.navigationController?.pushViewController(nextVC, animated: true)
 
     }
+    
+
 }
