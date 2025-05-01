@@ -49,7 +49,17 @@ class NetworkService {
                     completion(.failure(CustomError.wrongAdress))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                // 실패했을 경우, 서버 오류에 따른 적절한 처리
+                if let afError = error.asAFError {
+                    switch afError {
+                    case .responseValidationFailed:
+                        completion(.failure(CustomError.failRequest))
+                    default:
+                        completion(.failure(CustomError.wrongAdress))
+                    }
+                } else {
+                    completion(.failure(CustomError.failRequest))
+                }
             }
         }
     }

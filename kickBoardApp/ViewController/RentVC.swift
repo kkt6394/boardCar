@@ -25,6 +25,7 @@ class RentVC: UIViewController {
     }
 
     override func viewDidLoad() {
+        self.rentView.delegate = self
         super.viewDidLoad()
         setLocation()
         setupMyLocationButton()
@@ -101,7 +102,7 @@ class RentVC: UIViewController {
         guard let self = self, let tappedMarker = overlay as? NMFMarker else { return false }
 
         if let currentSelected = self.selectedMarker, currentSelected != tappedMarker {
-            self.showAlert("대여 중에는 더 이상 대여할 수 없어요")
+            self.showAlert("킥보드는 1대만 대여 가능합니다")
             return false
         }
 
@@ -176,9 +177,12 @@ class RentVC: UIViewController {
         rentView.setMarker(marker)
     }
 
+}
+
+extension RentVC: RentViewDeleagte {
     func showAlert(_ text: String) {
         let alert = UIAlertController(title: text, message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인했어요", style: .destructive))
+        alert.addAction(UIAlertAction(title: "확인했어요", style: .default))
         present(alert, animated: true)
     }
 }

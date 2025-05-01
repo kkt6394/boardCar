@@ -25,7 +25,7 @@ enum CustomError: Error {
         case .failEncoding:
             return "JSON 인코딩 실패"
         case .wrongAdress:
-            return "잘못된 주소입니다. 다시 입력해주세요"
+            return "잘못된 주소입니다.\n다시 입력해주세요\n(예: 서울시 삼청동)"
         }
     }
 }

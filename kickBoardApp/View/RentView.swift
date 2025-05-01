@@ -15,7 +15,13 @@ enum ViewMode {
     case returnMode
 }
 
+protocol RentViewDeleagte {
+    func showAlert(_ text: String)
+}
+
 class RentView: UIView {
+
+    var delegate: RentViewDeleagte?
 
     var selectedMarker = NMFMarker?.self
 
@@ -205,9 +211,13 @@ extension RentView: UITextViewDelegate {
             case .failure(let error):
                 guard let error = error as? CustomError else {
                     print(error)
-                    // delegate?.showAlert(error)
                     return
                 }
+
+                DispatchQueue.main.async {
+                    self.delegate?.showAlert(error.errorTitle)
+                }
+
                 print(error)
             }
         }
