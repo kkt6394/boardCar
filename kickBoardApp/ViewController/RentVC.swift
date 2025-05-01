@@ -188,6 +188,18 @@ class RentVC: UIViewController {
             }
             self.saveKickBoardsToUserDefaults(kickBoards: updatedKickBoards)
         }
+
+        if let currentEmail = UserDefaults.standard.string(forKey: "currentUserEmail"),
+           let savedUserData = UserDefaults.standard.data(forKey: "savedUsers"),
+           var users = try? JSONDecoder().decode([User].self, from: savedUserData),
+           let index = users.firstIndex(where: { $0.email == currentEmail }) {
+
+            users[index].count += 1
+
+            if let updatedUserData = try? JSONEncoder().encode(users) {
+                UserDefaults.standard.set(updatedUserData, forKey: "savedUsers")
+            }
+        }
     }
 
     // MARK: 반납 버튼
