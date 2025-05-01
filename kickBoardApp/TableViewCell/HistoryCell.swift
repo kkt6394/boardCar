@@ -65,6 +65,7 @@ class HistoryCell: UITableViewCell {
     }
     func configure(with user: User) {
         borrowLabel.text = "킥보드 대여 횟수 : \(user.count)회"
+        shareLabel.text = "\(user.name)님의 킥보드는 2회 대여되었어요!"
     }
 
 }

@@ -209,13 +209,13 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         guard let user = user else { return }
         
         if user.shareKickBoard.contains(where: { $0.isRent }) {
+            statusBar.text = "현재 상태 : 대여 중"
+            statusBar.textColor = .white
             statusBar.backgroundColor = .main
         } else {
             statusBar.text = "현재 상태 : 대여 가능"
             statusBar.backgroundColor = .sub3
             statusBar.textColor = .main
-
-        
         }
     }
 }

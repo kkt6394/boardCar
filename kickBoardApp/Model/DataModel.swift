@@ -23,7 +23,7 @@ struct KickBoard: Codable {
     var day: String = ""
     var lat: Double
     var lon: Double
-    var isRent: Bool = false
+    var isRent: Bool = true
 }
 
 // viewWillAppear에서 데이터 최신화
