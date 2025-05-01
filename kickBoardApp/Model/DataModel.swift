@@ -25,5 +25,3 @@ struct KickBoard: Codable {
     var lon: Double
     var isRent: Bool = true
 }
-
-// viewWillAppear에서 데이터 최신화
