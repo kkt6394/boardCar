@@ -17,28 +17,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        window.overrideUserInterfaceStyle = UIUserInterfaceStyle.light
+//        window.overrideUserInterfaceStyle = UIUserInterfaceStyle.light
         
-        let splashView = SplashView()
-        window.rootViewController = splashView
+//        let splashView = SplashView()
+        window.rootViewController = ShareViewController()
         
         self.window = window
         window.makeKeyAndVisible()
         
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            let loginVC = LoginVC()
-            let myPageVC = MyPageVC()
-            let nav = UINavigationController(rootViewController: loginVC)
-            
-            UIView.transition(with: self.window!,
-                              duration: 0.5,
-                              options: .transitionCrossDissolve,
-                              animations: {
-                self.window?.rootViewController = nav
-            },
-                              completion: nil)
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//            let loginVC = LoginVC()
+//            let myPageVC = MyPageVC()
+//            let nav = UINavigationController(rootViewController: loginVC)
+//            
+//            UIView.transition(with: self.window!,
+//                              duration: 0.5,
+//                              options: .transitionCrossDissolve,
+//                              animations: {
+//                self.window?.rootViewController = nav
+//            },
+//                              completion: nil)
+//        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
