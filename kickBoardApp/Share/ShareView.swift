@@ -10,7 +10,7 @@ import SnapKit
 import NMapsMap
 
 class ShareView: UIView {
-    
+        
     let mapView = NMFMapView()
     let customView = UIView()
     let kickBoardName = UITextField()
@@ -25,7 +25,6 @@ class ShareView: UIView {
         configureUI()
         
         currentButton.addTarget(self, action: #selector(currentButtonTapped), for: .touchUpInside)
-        sharedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -119,13 +118,10 @@ class ShareView: UIView {
         }
         
     }
+
     
     @objc func currentButtonTapped() {
         print("현재위치 버튼이 눌렸습니다")
-    }
-
-    @objc func buttonTapped() {
-        print("버튼이 눌렸습니다")
     }
         
 }
