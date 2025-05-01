@@ -54,7 +54,7 @@ class NameCell: UITableViewCell {
         }
     }
     func configure(with user: User) {
-        nameLabel.text = "(user.name)님,"
+        nameLabel.text = "\(user.name)님,"
     }
 }
 

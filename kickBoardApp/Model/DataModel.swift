@@ -7,24 +7,23 @@
 
 import Foundation
 
-//struct User: Codable {
-//    let email: String
-//    let password: String
-//    let name: String
-//}
-
 struct User: Codable {
     var email: String
     var password: String
     var name: String
-    var point: Int = 0
-    var kickBoardInfo: KickBoard
+    var point: Int = 2000
+    var count: Int = 0
+    var shareKickBoard: [KickBoard] = []
 }
 
 struct KickBoard: Codable {
     var name: String = ""
-    var rentPeriod: Date = Date()
-    var lat: Double = 0.0
-    var lon: Double = 0.0
-    
+    var year: String = ""
+    var month: String = ""
+    var day: String = ""
+    var lat: Double
+    var lon: Double
+    var isRent: Bool = false
 }
+
+// viewWillAppear에서 데이터 최신화

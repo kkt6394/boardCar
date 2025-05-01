@@ -63,5 +63,9 @@ class HistoryCell: UITableViewCell {
             $0.leading.equalTo(shareImage.snp.trailing).offset(8)
         }
     }
+    func configure(with user: User) {
+        borrowLabel.text = "킥보드 대여 횟수 : \(user.count)회"
+    }
+
 }
 

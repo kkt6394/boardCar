@@ -11,7 +11,7 @@ import SnapKit
 class MyPageTableView: UIView {
     var user: User?
     
-    let statusBar = UITextView()
+    let statusBar = UILabel()
     
     let tableView = UITableView(frame: .zero, style: .insetGrouped)
     
@@ -60,7 +60,7 @@ class MyPageTableView: UIView {
 //        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
         logoutButton.snp.makeConstraints {
-            $0.top.equalTo(tableView.snp.bottom).offset(16)
+            $0.bottom.equalTo(safeAreaLayoutGuide)
             $0.centerX.equalToSuperview()
         }
         deleteIdButton.snp.makeConstraints {
@@ -123,7 +123,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             return 1
         // 동적으로 개수 반환해줄 것, 수정예정
         case .shareInfoSection:
-            return 15
+            return 10
         case .adSection:
             return 1
         }
@@ -176,9 +176,16 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .pointSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PointCell.id, for: indexPath) as? PointCell else { return UITableViewCell() }
+            if let user = self.user {
+                cell.configure(with: user)
+            }
             return cell
         case .historySection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryCell.id, for: indexPath) as? HistoryCell else { return UITableViewCell() }
+            if let user = self.user {
+                cell.configure(with: user)
+            }
+
             return cell
         case .shareInfoSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ShareCell.id, for: indexPath) as? ShareCell else { return UITableViewCell() }
