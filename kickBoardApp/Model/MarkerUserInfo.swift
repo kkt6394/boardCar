@@ -8,5 +8,5 @@
 import Foundation
 
 enum MarkerUserInfo: String {
-    case selected = "selected"
+    case kickBoardModel = "kickBoardModel"
 }

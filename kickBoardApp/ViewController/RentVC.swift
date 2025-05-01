@@ -13,7 +13,8 @@ class RentVC: UIViewController {
 
     // 전체 킥보드 데이터
     private var markers: [NMFMarker] = []
-    // 킥보드 데이터
+
+    // 선택된 킥보드 데이터
     private var selectedMarker: NMFMarker?
 
     let locationManager = CLLocationManager()
@@ -32,6 +33,13 @@ class RentVC: UIViewController {
         setMarker()
         setupRentButton()
         setupReturnButton()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        // view가 로드 될때마다 마커를 지우고
+        markers.forEach { $0.hidden = true }
+        // 다시 그리기
+        loadMarker()
     }
 
     private func setLocation() {
@@ -74,62 +82,84 @@ class RentVC: UIViewController {
         }
     }
 
-    // MARK: 키보드(마커) 만드는 메서드
     func setMarker() {
-        let coordinates = [
-            NMGLatLng(lat: 37.5557, lng: 126.9676),
-            NMGLatLng(lat: 37.5560, lng: 126.9720),
-            NMGLatLng(lat: 37.5570, lng: 126.9700),
-            NMGLatLng(lat: 37.5550, lng: 126.9750),
-            NMGLatLng(lat: 37.5530, lng: 126.9686)
+        let markers = [
+            // 4, 5번 View 킥보드 모델을 기준으로 데이터 추가
+            KickBoard(name: "boardCar1", lat: 37.5560, lon: 126.9720),
+            KickBoard(name: "boardCar2", lat: 37.5570, lon: 126.9700),
+            KickBoard(name: "boardCar3", lat: 37.5550, lon: 126.9750),
+            KickBoard(name: "boardCar4", lat: 37.5530, lon: 126.9686)
         ]
 
-        // 좌표를 하나씩 순회하면서
-        for coord in coordinates {
+        self.markers = []  // 전체 킥보드 데이터 초기화
+
+        for mark in markers {
             // 킥보드의 위치를 설정해줌
-            let marker = NMFMarker(position: coord)
+            let marker = NMFMarker(position: NMGLatLng(lat: mark.lat, lng: mark.lon))
             marker.iconImage = NMFOverlayImage(name: "kickBoardIcon")
-            marker.userInfo[MarkerUserInfo.selected.rawValue] = false
+            marker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] = mark
             marker.touchHandler = markerTouchHandler
             rentView.setMarker(marker)
+            self.markers.append(marker)
+        }
+
+        do {
+            let data = try JSONEncoder().encode(markers)
+            UserDefaults.standard.set(data, forKey: "kickBoardHistory")
+        } catch {
+            print("킥보드 저장에 실패했습니다.")
         }
     }
 
+    // MARK: UserDefaults의 데이터를 불러와서 load하는 메서드
+    func loadMarker() {
+        if let saveKickBoards = loadKickBoardsFromUserDefaults() {
+            print(saveKickBoards)
+            for mark in saveKickBoards {
+                let marker = NMFMarker(position: NMGLatLng(lat: mark.lat, lng: mark.lon))
+                marker.iconImage = NMFOverlayImage(name: "kickBoardIcon")
+                marker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] = mark
+                marker.touchHandler = markerTouchHandler
+                rentView.setMarker(marker)
+            }
+        }
+    }
+
+    // MARK: UserDefaults의 데이터 불러오는 메서드
+    func loadKickBoardsFromUserDefaults() -> [KickBoard]? {
+        guard let data = UserDefaults.standard.data(forKey: "kickBoardHistory") else { return nil }
+        return try? JSONDecoder().decode([KickBoard].self, from: data)
+
+    }
 
     // MARK: 마커 이벤트 핸들링
     private lazy var markerTouchHandler: (NMFOverlay) -> Bool = { [weak self] overlay in
-        // weak self니까 self가 있는지 확인. tappedMarker를 NMFMarker로 다운 캐스팅
         guard let self = self, let tappedMarker = overlay as? NMFMarker else { return false }
 
+        // 마커의 사용자 정보에서 KickBoard 모델 가져오기
+        guard var model = tappedMarker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] as? KickBoard else {
+            return false
+        }
+
+        // 이미 다른 킥보드가 선택되어 있으면 경고를 띄운다
         if let currentSelected = self.selectedMarker, currentSelected != tappedMarker {
             self.showAlert("킥보드는 1대만 대여 가능합니다")
             return false
         }
 
-        // 선택된 마커가 있는지 확인하고, 기존에 선택된 마커와 다른 경우에만 아래의 설정 적용
-        if let selected = self.selectedMarker, selected != tappedMarker {
-            selected.iconImage = NMFOverlayImage(name: "kickBoardIcon")
-            selected.userInfo[MarkerUserInfo.selected.rawValue] = false
-        }
+        // 킥보드 대여 상태를 체크하고 해제하는 부분
+        model.isRent = !model.isRent
+        print(model.isRent)
+        tappedMarker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] = model
 
-        /*
-        초기 실행 시에는 버튼이 선택이 안되어 있으니까 nil이 저장되어 있고 타입 캐스팅에 실패하여 false가 저장됨
-        이미 선택이 되어 있으면 icon을 선택하기 전 이미지(컬러 없는 이미지)로 변경하고,
-        선택이 안되어 있으면 icon을 선택하는 이미지(컬러 있는 이미지)로 변경함
-         */
-        let isSelected = tappedMarker.userInfo[MarkerUserInfo.selected.rawValue] as? Bool ?? false
+        // 마커의 아이콘 이미지를 대여 상태에 맞게 변경
+        tappedMarker.iconImage = NMFOverlayImage(name: model.isRent ? "seletedKickBoard" : "kickBoardIcon")
 
-        if isSelected {
-            tappedMarker.iconImage = NMFOverlayImage(name: "kickBoardIcon")
-            tappedMarker.userInfo[MarkerUserInfo.selected.rawValue] = false
-            self.selectedMarker = nil
-            self.rentView.rentButton.isHidden = true
-        } else {
-            tappedMarker.iconImage = NMFOverlayImage(name: "seletedKickBoard")
-            tappedMarker.userInfo[MarkerUserInfo.selected.rawValue] = true
-            self.selectedMarker = tappedMarker
-            self.rentView.rentButton.isHidden = false
-        }
+        // 대여된 킥보드는 selectedMarker에 설정, 해제되면 nil로 설정
+        self.selectedMarker = model.isRent ? tappedMarker : nil
+
+        // 대여 버튼 보이기/숨기기
+        self.rentView.rentButton.isHidden = !model.isRent
 
         return true
     }
@@ -143,8 +173,21 @@ class RentVC: UIViewController {
     @objc func rentBtnTapped() {
         print("대여하기 버튼 클릭")
         self.rentView.rentButton.isHidden = true
-        selectedMarker?.hidden = true
         self.rentView.returnButton.isHidden = false
+
+        // 대여 상태 저장 (선택된 킥보드가 nil이면 저장할 필요 없음)
+        if let marker = selectedMarker,
+           var model = marker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] as? KickBoard {
+            model.isRent = true
+            marker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] = model
+
+            marker.hidden = true
+            // 대여된 킥보드 업데이트
+            let updatedKickBoards = self.markers.compactMap {
+                $0.userInfo[MarkerUserInfo.kickBoardModel.rawValue] as? KickBoard
+            }
+            self.saveKickBoardsToUserDefaults(kickBoards: updatedKickBoards)
+        }
     }
 
     // MARK: 반납 버튼
@@ -155,28 +198,54 @@ class RentVC: UIViewController {
 
     @objc func returnBtnTapped() {
         print("반납하기 버튼 클릭")
-        selectedMarker?.hidden = true
-        selectedMarker?.userInfo[MarkerUserInfo.selected.rawValue] = false
-        selectedMarker?.iconImage = NMFOverlayImage(name: "kickBoardIcon")
-        selectedMarker = nil
-        self.rentView.returnButton.isHidden = true
-        self.rentView.rentButton.isHidden = false
-        returnCurrentLocation()
-    }
+        guard let marker = selectedMarker,
+              var model = marker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] as? KickBoard,
+              let location = locationManager.location else {
+            showAlert("반납할 킥보드가 없습니다.")
+            return
+        }
 
-    // MARK: 현재 위치에 반납하는 메서드
-    // 사실 기존에 빌렸던 킥보드를 반납하는건 아니고 해당 위치에 새로 생성하는 방식입니다...
-    func returnCurrentLocation() {
-        guard let lat = locationManager.location?.coordinate.latitude else { return }
-        guard let lon = locationManager.location?.coordinate.longitude else { return }
-        let coord = NMGLatLng(lat: lat, lng: lon)
-        let marker = NMFMarker(position: coord)
+        let coord = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
+
+        // 킥보드를 대여 중이 아닌 상태로 변경
+        model.isRent = false
+        marker.userInfo[MarkerUserInfo.kickBoardModel.rawValue] = model
+
+        // 마커 지도에 다시 보이게 설정
+        marker.position = coord
+        marker.hidden = false
         marker.iconImage = NMFOverlayImage(name: "kickBoardIcon")
-        marker.userInfo[MarkerUserInfo.selected.rawValue] = false
-        marker.touchHandler = markerTouchHandler
+
+        // 지도에 다시 붙이기
         rentView.setMarker(marker)
+
+        // 킥보드 모델을 순회하면서 seletedmarker와 같은지 확인
+        if let index = markers.firstIndex(where: { $0 == marker }) {
+            markers[index] = marker
+        } else {
+            markers.append(marker)
+        }
+
+        let updatedKickBoards = self.markers.compactMap {
+            $0.userInfo[MarkerUserInfo.kickBoardModel.rawValue] as? KickBoard
+        }
+        self.saveKickBoardsToUserDefaults(kickBoards: updatedKickBoards)
+
+        // UI 상태 초기화
+        self.selectedMarker = nil
+        self.rentView.rentButton.isHidden = false
+        self.rentView.returnButton.isHidden = true
     }
 
+    // MARK: UserDefault에 킥보드 저장하는 메서드
+    func saveKickBoardsToUserDefaults(kickBoards: [KickBoard]) {
+        do {
+            let data = try JSONEncoder().encode(kickBoards)
+            UserDefaults.standard.set(data, forKey: "kickBoardHistory")
+        } catch {
+            print("저장 실패: \(error)")
+        }
+    }
 }
 
 extension RentVC: RentViewDeleagte {
