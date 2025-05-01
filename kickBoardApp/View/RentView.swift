@@ -59,7 +59,6 @@ class RentView: UIView {
         button.titleLabel?.font = UIFont(name: "SUIT-Bold", size: 20)
         button.backgroundColor = .main
         button.layer.cornerRadius = 15
-//        button.addTarget(self, action: #selector(rentBtnTapped), for: .touchUpInside)
         return button
     }()
 
@@ -72,7 +71,6 @@ class RentView: UIView {
         button.layer.cornerRadius = 15
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.main.cgColor
-//        button.addTarget(self, action: #selector(returnButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -84,7 +82,6 @@ class RentView: UIView {
         button.layer.shadowOpacity = 0.4
         button.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
         button.layer.shadowRadius = 2
-        //        button.addTarget(self, action: #selector(locationBtnTapped), for: .touchUpInside)
         return button
     }()
 
@@ -163,28 +160,23 @@ class RentView: UIView {
         }
     }
 
+    // MARK: View에 마커 세팅
+    // 세부 마커 설정은 VC에 두었습니다
     func setMarker(_ marker: NMFMarker) {
         marker.mapView = myView.mapView
     }
-
-//    @objc
-//    private func returnButtonTapped() {
-//        print("대여하기 버튼이 눌렸습니다")
-//    }
-
-//    @objc
-//    private func locationBtnTapped() {
-//        print("현 위치 버튼이 눌렸습니다")
-//    }
 }
 
+// MARK: textView 세부 설정
 extension RentView: UITextViewDelegate {
+    // textView가 입력 중일 때 폰트 색상 변경하는 메서드
     func textViewDidBeginEditing(_ textView: UITextView) {
         guard addressTextField.textColor == .font3 else { return }
         addressTextField.text = nil
         addressTextField.textColor = .font1
     }
 
+    // textView가 비어 있을 때 placeHolder 같이 적용한 메서드
     func textViewDidEndEditing(_ textView: UITextView) {
         if addressTextField.text == "" {
             addressTextField.text = "주소를 입력해주세요(동까지만 입력)"
@@ -192,14 +184,17 @@ extension RentView: UITextViewDelegate {
         }
     }
 
-    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+    // textView에서 return 키를 누르면 textView.text를 전달하도록 한 메서드
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             searchAddress(address: textView.text)
+            textView.resignFirstResponder()
             return false
         }
         return true
     }
 
+    // MARK: 서치 바에서 주소 검색하는 메서드
     private func searchAddress(address: String) {
         networkService.fetchDataByAlamofire(address: address) { result in
             switch result {
@@ -210,6 +205,7 @@ extension RentView: UITextViewDelegate {
             case .failure(let error):
                 guard let error = error as? CustomError else {
                     print(error)
+                    // delegate?.showAlert(error)
                     return
                 }
                 print(error)
@@ -217,6 +213,7 @@ extension RentView: UITextViewDelegate {
         }
     }
 
+    // 카메라의 시점을 이동하게끔 하는 메서드
     private func moveToCamera(lat: String, lng: String) {
         guard let userlat = Double(lat) else { return }
         guard let userlng = Double(lng) else { return }
@@ -225,7 +222,15 @@ extension RentView: UITextViewDelegate {
         self.myView.mapView.moveCamera(NMFCameraUpdate(scrollTo: coord))
     }
 
+    // UI에 터치 이벤트가 발생하면 입력을 종료하게 하는 메서드
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.endEditing(true)
     }
 }
+
+/*
+ RentView에서 주소 입력을 잘못하면 Alert이 필요한 상황
+ View는 Alert을 present 할수 없음
+ 그러면 VC에서 해야하는데
+ View 입장에서는 대리자가 필요함
+ */

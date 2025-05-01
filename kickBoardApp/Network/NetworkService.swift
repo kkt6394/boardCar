@@ -46,7 +46,7 @@ class NetworkService {
                     print("경도: \(x) , 위도: \(y)")
                     completion(.success((x, y)))
                 } else {
-                    completion(.failure(CustomError.failDecoding))
+                    completion(.failure(CustomError.wrongAdress))
                 }
             case .failure(let error):
                 completion(.failure(error))

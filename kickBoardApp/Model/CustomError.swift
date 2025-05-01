@@ -12,6 +12,7 @@ enum CustomError: Error {
     case failRequest
     case failDecoding
     case failEncoding
+    case wrongAdress
 
     var errorTitle: String {
         switch self {
@@ -23,6 +24,8 @@ enum CustomError: Error {
             return "JSON 디코딩 실패"
         case .failEncoding:
             return "JSON 인코딩 실패"
+        case .wrongAdress:
+            return "잘못된 주소입니다. 다시 입력해주세요"
         }
     }
 }
