@@ -60,7 +60,11 @@ class LoginView: UIView {
         idTextField.backgroundColor = UIColor.sub3
         
         //MARK: password 텍스트 필드 UI
-        passwordTextField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 16.0, height: 0.0))
+        
+        passwordTextField.leftView = UIView(frame: CGRect(x: 0.0,
+                                                          y: 0.0,
+                                                          width: 16.0,
+                                                          height: 0.0))
         passwordTextField.leftViewMode = .always
         
         passwordTextField.placeholder = "비밀번호"

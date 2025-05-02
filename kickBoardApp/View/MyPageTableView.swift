@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 class MyPageTableView: UIView {
+    weak var delegate: MyPageTableViewDeleagte?
+    
     var user: User?
     
     let statusBar = UILabel()
@@ -46,7 +48,7 @@ class MyPageTableView: UIView {
         [logoutButton, deleteIdButton]
             .forEach { footerView.addSubview($0) }
         tableView.tableFooterView = footerView
-
+        
         logoutButton.setTitle("로그아웃", for: .normal)
         logoutButton.setTitleColor(.black, for: .normal)
         logoutButton.titleLabel?.font = UIFont(name: "SUIT-Light", size: 14)
@@ -54,28 +56,31 @@ class MyPageTableView: UIView {
         logoutButton.layer.cornerRadius = 8.0
         logoutButton.clipsToBounds = true
         logoutButton.backgroundColor = .font3
-//        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
-        deleteIdButton.setTitle("회원탈퇴", for: .normal)
-        deleteIdButton.setTitleColor(.black, for: .normal)
-        deleteIdButton.titleLabel?.font = UIFont(name: "SUIT-Light", size: 12)
-        deleteIdButton.backgroundColor = .white
-//        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+//        deleteIdButton.setTitle("회원탈퇴", for: .normal)
+//        deleteIdButton.setTitleColor(.black, for: .normal)
+//        deleteIdButton.titleLabel?.font = UIFont(name: "SUIT-Light", size: 12)
+//        deleteIdButton.backgroundColor = .white
+        //        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
         logoutButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
-                $0.centerX.equalToSuperview()
-                $0.width.equalTo(106)
-                $0.height.equalTo(27)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(106)
+            $0.height.equalTo(27)
         }
-        deleteIdButton.snp.makeConstraints {
-            $0.top.equalTo(logoutButton.snp.bottom).offset(12)
-            $0.trailing.equalToSuperview().offset(-20)
-            $0.width.equalTo(42)
-            $0.height.equalTo(15)
-        }
-
-
+//        deleteIdButton.snp.makeConstraints {
+//            $0.top.equalTo(logoutButton.snp.bottom).offset(12)
+//            $0.trailing.equalToSuperview().offset(-20)
+//            $0.width.equalTo(42)
+//            $0.height.equalTo(15)
+//        }
+        
+        
+    }
+    @objc func logoutButtonTapped() {
+        delegate?.didTapLogoutButton()
     }
     //MARK: UI 설정 메서드
     private func setupTableView() {
@@ -173,6 +178,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
     // 셀 내용 (섹션 별 내용 분기)
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let section = TableViewSections(rawValue: indexPath.section) else { return UITableViewCell() }
+        
         switch section {
         case .nameSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NameCell.id, for: indexPath) as? NameCell else { return UITableViewCell() }
@@ -180,19 +186,21 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
                 cell.configure(with: user)
             }
             return cell
+            
         case .pointSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PointCell.id, for: indexPath) as? PointCell else { return UITableViewCell() }
             if let user = self.user {
                 cell.configure(with: user)
             }
             return cell
+            
         case .historySection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HistoryCell.id, for: indexPath) as? HistoryCell else { return UITableViewCell() }
             if let user = self.user {
                 cell.configure(with: user)
             }
-            
             return cell
+            
         case .shareInfoSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ShareCell.id, for: indexPath) as? ShareCell,
                   let user = self.user else { return UITableViewCell() }
@@ -206,54 +214,37 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         }
     }
     func updateStatusBar() {
-        // 1. UserDefaults에서 현재 이메일 가져오기
-        guard let currentEmail = UserDefaults.standard.string(forKey: "currentUserEmail") else {
-            print("로그인 정보 없음")
+        // kickBoardHistory에서 대여 중인 킥보드가 있는지 확인
+        guard
+            let data = UserDefaults.standard.data(forKey: "kickBoardHistory"),
+            let kickBoards = try? JSONDecoder().decode([KickBoard].self, from: data)
+        else {
+            print("킥보드 히스토리 정보를 가져오지 못했습니다.")
+            DispatchQueue.main.async {
+                self.statusBar.text = "현재 상태 : 대여 가능"
+                self.statusBar.textColor = .main
+                self.statusBar.backgroundColor = .sub3
+            }
             return
         }
         
-        // 2. UserDefaults에서 userList 가져오기
-        guard let userData = UserDefaults.standard.data(forKey: "savedUsers"),
-              let userList = try? JSONDecoder().decode([User].self, from: userData) else {
-            print("유저 목록 불러오기 실패")
-            return
-        }
-        
-        // 3. 현재 로그인한 유저 찾기
-        guard let currentUser = userList.first(where: { $0.email == currentEmail }) else {
-            print("해당 이메일의 유저 없음")
-            return
-        }
-        
-        // 4. 해당 유저의 킥보드 중 대여중인 것이 있는지 확인
-        let isRenting = currentUser.shareKickBoard.contains(where: { $0.isRent })
-        
-        // 5. 상태바 업데이트
-        if isRenting {
-            statusBar.text = "현재 상태 : 대여 중"
-            statusBar.textColor = .white
-            statusBar.backgroundColor = .main
+        if kickBoards.contains(where: { $0.isRent }) {
+            // 대여 중인 킥보드가 있음
+            DispatchQueue.main.async {
+                self.statusBar.text = "현재 상태 : 대여 중"
+                self.statusBar.textColor = .white
+                self.statusBar.backgroundColor = .main
+            }
         } else {
-            statusBar.text = "현재 상태 : 대여 가능"
-            statusBar.textColor = .main
-            statusBar.backgroundColor = .sub3
+            // 대여 가능한 상태
+            DispatchQueue.main.async {
+                self.statusBar.text = "현재 상태 : 대여 가능"
+                self.statusBar.textColor = .main
+                self.statusBar.backgroundColor = .sub3
+            }
         }
-    }
-        
-        //    func updateStatusBar() {
-        //        guard let user = user else { return }
-        //
-        //
-        //        if user.shareKickBoard.contains(where: { $0.isRent }) {
-        //            statusBar.text = "현재 상태 : 대여 중"
-        //            statusBar.textColor = .white
-        //            statusBar.backgroundColor = .main
-        //        } else {
-        //            statusBar.text = "현재 상태 : 대여 가능"
-        //            statusBar.backgroundColor = .sub3
-        //            statusBar.textColor = .main
-        //        }
-        //    }
     }
     
+}
+
 

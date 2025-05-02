@@ -16,7 +16,9 @@ import UIKit
 
 import UIKit
 
-class MyPageVC: UIViewController {
+class MyPageVC: UIViewController, MyPageTableViewDeleagte {
+    
+    
     let myPageTableView = MyPageTableView()
     
     override func loadView() {
@@ -25,12 +27,13 @@ class MyPageVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        myPageTableView.delegate = self
     }
     override func viewWillAppear(_ animated: Bool) {
         if let user = loadCurrentUser() {
             myPageTableView.user = user
-            myPageTableView.tableView.reloadData()
             myPageTableView.updateStatusBar()
+            myPageTableView.tableView.reloadData()
         }
     }
     
@@ -42,4 +45,11 @@ class MyPageVC: UIViewController {
         }
         return users.first(where: { $0.email == currentEmail })
     }
+    func didTapLogoutButton() {
+        let loginVC = LoginVC()
+        loginVC.modalPresentationStyle = .fullScreen
+        present(loginVC, animated: true, completion: nil)
+
+    }
+    
 }
