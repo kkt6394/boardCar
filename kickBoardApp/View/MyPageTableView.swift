@@ -104,7 +104,7 @@ class MyPageTableView: UIView {
 }
 
 extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
-    
+
     enum TableViewSections: Int, CaseIterable {
         case nameSection
         case pointSection
@@ -112,14 +112,14 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         case shareInfoSection
         case adSection
     }
-    
+
     // 섹션 개수
     func numberOfSections(in tableView: UITableView) -> Int {
         return TableViewSections.allCases.count
     }
     // 섹션 안 셀 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         guard let sectionType = TableViewSections(rawValue: section) else { return 0}
         switch sectionType {
         case .nameSection:
@@ -137,7 +137,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
     // 커스텀 헤더 뷰 내용
     func tableView(_ tableView: UITableView,viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        
+
         let label: UILabel = {
             let label = UILabel()
             label.font = UIFont(name: "SUIT-Bold", size: 18)
@@ -169,7 +169,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             return 0
         }
     }
-    
+
     // 셀 내용 (섹션 별 내용 분기)
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let section = TableViewSections(rawValue: indexPath.section) else { return UITableViewCell() }
@@ -191,7 +191,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             if let user = self.user {
                 cell.configure(with: user)
             }
-            
+
             return cell
         case .shareInfoSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ShareCell.id, for: indexPath) as? ShareCell,
@@ -199,36 +199,27 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             let kickBoard = user.shareKickBoard[indexPath.row]
             cell.configure(with: kickBoard)
             return cell
-            
+
         case .adSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: AdCell.id, for: indexPath) as? AdCell else { return UITableViewCell() }
             return cell
         }
     }
+
     func updateStatusBar() {
-        // 1. UserDefaults에서 현재 이메일 가져오기
         guard let currentEmail = UserDefaults.standard.string(forKey: "currentUserEmail") else {
             print("로그인 정보 없음")
             return
         }
-        
-        // 2. UserDefaults에서 userList 가져오기
-        guard let userData = UserDefaults.standard.data(forKey: "savedUsers"),
-              let userList = try? JSONDecoder().decode([User].self, from: userData) else {
-            print("유저 목록 불러오기 실패")
+
+        guard let kickBoardData = UserDefaults.standard.data(forKey: "kickBoardHistory"),
+              let kickBoards = try? JSONDecoder().decode([KickBoard].self, from: kickBoardData) else {
+            print("킥보드 데이터 없음")
             return
         }
-        
-        // 3. 현재 로그인한 유저 찾기
-        guard let currentUser = userList.first(where: { $0.email == currentEmail }) else {
-            print("해당 이메일의 유저 없음")
-            return
-        }
-        
-        // 4. 해당 유저의 킥보드 중 대여중인 것이 있는지 확인
-        let isRenting = currentUser.shareKickBoard.contains(where: { $0.isRent })
-        
-        // 5. 상태바 업데이트
+
+        let isRenting = kickBoards.contains { $0.isRent }
+
         if isRenting {
             statusBar.text = "현재 상태 : 대여 중"
             statusBar.textColor = .white
@@ -239,7 +230,8 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             statusBar.backgroundColor = .sub3
         }
     }
-        
+}
+
         //    func updateStatusBar() {
         //        guard let user = user else { return }
         //
@@ -254,6 +246,3 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         //            statusBar.textColor = .main
         //        }
         //    }
-    }
-    
-
