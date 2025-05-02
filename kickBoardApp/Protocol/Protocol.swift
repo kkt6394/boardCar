@@ -10,3 +10,7 @@ import Foundation
 protocol LoginViewDelegate: AnyObject {
     func showAlert(message: String)
 }
+
+protocol MyPageTableViewDeleagte: AnyObject {
+    func didTapLogoutButton()
+}
