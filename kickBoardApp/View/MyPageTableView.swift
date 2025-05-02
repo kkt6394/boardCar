@@ -109,7 +109,7 @@ class MyPageTableView: UIView {
 }
 
 extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
-    
+
     enum TableViewSections: Int, CaseIterable {
         case nameSection
         case pointSection
@@ -117,14 +117,14 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
         case shareInfoSection
         case adSection
     }
-    
+
     // 섹션 개수
     func numberOfSections(in tableView: UITableView) -> Int {
         return TableViewSections.allCases.count
     }
     // 섹션 안 셀 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+
         guard let sectionType = TableViewSections(rawValue: section) else { return 0}
         switch sectionType {
         case .nameSection:
@@ -142,7 +142,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
     // 커스텀 헤더 뷰 내용
     func tableView(_ tableView: UITableView,viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        
+
         let label: UILabel = {
             let label = UILabel()
             label.font = UIFont(name: "SUIT-Bold", size: 18)
@@ -174,7 +174,7 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             return 0
         }
     }
-    
+
     // 셀 내용 (섹션 별 내용 분기)
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let section = TableViewSections(rawValue: indexPath.section) else { return UITableViewCell() }
@@ -207,44 +207,35 @@ extension MyPageTableView: UITableViewDelegate, UITableViewDataSource {
             let kickBoard = user.shareKickBoard[indexPath.row]
             cell.configure(with: kickBoard)
             return cell
-            
+
         case .adSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: AdCell.id, for: indexPath) as? AdCell else { return UITableViewCell() }
             return cell
         }
     }
+
     func updateStatusBar() {
-        // kickBoardHistory에서 대여 중인 킥보드가 있는지 확인
-        guard
-            let data = UserDefaults.standard.data(forKey: "kickBoardHistory"),
-            let kickBoards = try? JSONDecoder().decode([KickBoard].self, from: data)
-        else {
-            print("킥보드 히스토리 정보를 가져오지 못했습니다.")
-            DispatchQueue.main.async {
-                self.statusBar.text = "현재 상태 : 대여 가능"
-                self.statusBar.textColor = .main
-                self.statusBar.backgroundColor = .sub3
-            }
+        guard let currentEmail = UserDefaults.standard.string(forKey: "currentUserEmail") else {
+            print("로그인 정보 없음")
             return
         }
-        
-        if kickBoards.contains(where: { $0.isRent }) {
-            // 대여 중인 킥보드가 있음
-            DispatchQueue.main.async {
-                self.statusBar.text = "현재 상태 : 대여 중"
-                self.statusBar.textColor = .white
-                self.statusBar.backgroundColor = .main
-            }
+
+        guard let kickBoardData = UserDefaults.standard.data(forKey: "kickBoardHistory"),
+              let kickBoards = try? JSONDecoder().decode([KickBoard].self, from: kickBoardData) else {
+            print("킥보드 데이터 없음")
+            return
+        }
+
+        let isRenting = kickBoards.contains { $0.isRent }
+
+        if isRenting {
+            statusBar.text = "현재 상태 : 대여 중"
+            statusBar.textColor = .white
+            statusBar.backgroundColor = .main
         } else {
-            // 대여 가능한 상태
-            DispatchQueue.main.async {
-                self.statusBar.text = "현재 상태 : 대여 가능"
-                self.statusBar.textColor = .main
-                self.statusBar.backgroundColor = .sub3
-            }
+            statusBar.text = "현재 상태 : 대여 가능"
+            statusBar.textColor = .main
+            statusBar.backgroundColor = .sub3
         }
     }
-    
 }
-
-
