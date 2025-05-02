@@ -24,7 +24,6 @@ class ShareView: UIView {
         super.init(frame: frame)
         setupUI()
         configureUI()
-        
         mapView.zoomLevel = 14
     }
     
@@ -32,7 +31,7 @@ class ShareView: UIView {
         super.init(coder: coder)
         setupUI()
         configureUI()
-
+        
     }
     
     private func setupUI() {
