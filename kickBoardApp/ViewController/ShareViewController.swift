@@ -23,6 +23,7 @@ class ShareViewController: UIViewController {
     
     override func loadView() {
         view = shareView    // 커스텀 뷰를 컨트롤러 뷰로 설정
+
     }
     
     override func viewDidLoad() {
@@ -36,20 +37,17 @@ class ShareViewController: UIViewController {
         
         shareView.pickerView.delegate = self
         shareView.pickerView.dataSource = self
-        
+
         shareView.sharedButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        
-        // UserDefault에 들어있는 데이터 삭제 기능
-        // UserDefaults.standard.removeObject(forKey: "KickboardHistory")
-        
     }
     
-    // MARK: - 경고 알림
+// MARK: - 경고 알림
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)
     }
+
     
     // MARK: - 데이터 생성
     func createKickboardData() -> Bool {
@@ -69,7 +67,7 @@ class ShareViewController: UIViewController {
         let selectedDay = days[dayIndex]
         
         let center = shareView.mapView.cameraPosition.target
-        
+
         let newData = KickBoard(name: name, year: selectedYear, month: selectedMonth, day: selectedDay, lat: center.lat, lon: center.lng)
         
         let defaults = UserDefaults.standard
@@ -79,7 +77,7 @@ class ShareViewController: UIViewController {
         if let savedData = defaults.data(forKey: "kickBoardHistory"),
            let decoded = try? JSONDecoder().decode([KickBoard].self, from: savedData) {
             savedKickboardData = decoded
-            
+
             // 중복 이름 체크
             if savedKickboardData.contains(where: { $0.name == name }) {
                 showAlert(title: "중복 경고", message: "이미 등록된 킥보드 입니다")
@@ -87,13 +85,13 @@ class ShareViewController: UIViewController {
             }
         }
         
-        // 새 데이터 저장
         savedKickboardData.append(newData)
         
         if let encoded = try? JSONEncoder().encode(savedKickboardData) {
             defaults.set(encoded, forKey: "kickBoardHistory")
         }
         
+
         // 현재 로그인된 유저의 데이터에도 반영
         if let currentEmail = defaults.string(forKey: "currentUserEmail"),
            let savedUserData = defaults.data(forKey: "savedUsers"),
@@ -104,11 +102,11 @@ class ShareViewController: UIViewController {
             
             if let updatedUserData = try? JSONEncoder().encode(users) {
                 defaults.set(updatedUserData, forKey: "savedUsers")
+
             }
             
         }
-        return true
-        
+        return true  
     }
     
     // MARK: - 저장된 데이터 읽기
@@ -131,7 +129,7 @@ class ShareViewController: UIViewController {
     // MARK: - 지도 중앙에 킥보드 마커 표시
     func addKickboardIconAtCenter() {
         let center = shareView.mapView.cameraPosition.target
-        
+   
         let marker = NMFMarker()
         marker.position = center
         marker.iconImage = NMFOverlayImage(name: "kickBoardIcon")
@@ -230,6 +228,7 @@ extension ShareViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         
         return label
     }
+
     
 }
 
@@ -240,7 +239,6 @@ extension ShareViewController: NMFMapViewCameraDelegate {
         print(mapView.cameraPosition.target)
     }
 }
-
 // MARK: - 위치 업데이트 콜백
 extension ShareViewController: CLLocationManagerDelegate {
     // MARK: 현위치로 업데이트 해주는 부분. 카메라도 해당 위치로 이동함
@@ -258,4 +256,5 @@ extension ShareViewController: CLLocationManagerDelegate {
         }
     }
 }
+
 

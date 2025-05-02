@@ -32,8 +32,7 @@ class ShareView: UIView {
         super.init(coder: coder)
         setupUI()
         configureUI()
-        
-        
+
     }
     
     private func setupUI() {
@@ -127,7 +126,7 @@ class ShareView: UIView {
         }
         
     }
-        
+
 }
     
 
